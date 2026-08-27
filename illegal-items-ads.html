@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Illegal Items Ads</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <style>
+    input, select, textarea {
+      color-scheme: dark;
+    }
+    .top-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      background-color: #1c1c1c;
+      padding: 10px 20px;
+      gap: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .top-nav button {
+      background-color: #111;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 15px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .top-nav button:hover {
+      background-color: #333;
+    }
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .actions button {
+      background-color: #4da8ff;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .output-box {
+      margin-top: 20px;
+      background-color: #1c1c1c;
+      padding: 16px;
+      border-radius: 12px;
+      min-height: 50px;
+      white-space: pre-line;
+      font-size: 15px;
+    }
+    .success-msg {
+      margin-top: 15px;
+      text-align: center;
+      color: #d4ffd4;
+      background-color: #1f6624;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 15px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 via-indigo-900 to-black min-h-screen text-white font-sans p-4 pt-[100px]">
+
+<!-- ✅ Navbar -->
+<div class="top-nav">
+  <button onclick="navigateTo('new-auto-ads.html')">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')">Work</button>
+  <button onclick="navigateTo('dating-ads.html')">Dating</button>
+  <button onclick="navigateTo('other-ads.html')">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+</div>
+
+<!-- ✅ Card Content -->
+<div class="max-w-3xl mx-auto bg-gray-800 rounded-2xl shadow-xl p-6 space-y-6">
+  <h1 class="text-3xl font-bold text-center text-blue-400 mb-4">Illegal Items Ads</h1>
+
+  <label for="lookingFor">Looking for:</label>
+  <select id="lookingFor" class="w-full p-2 rounded bg-gray-900 border border-gray-700">
+    <option value="">-- Select --</option>
+    <option value="Unregistered Weapon">Unregistered Weapon</option>
+    <option value="Stolen Documents">Stolen Documents</option>
+    <option value="Forged IDs">Forged IDs</option>
+  </select>
+
+  <div class="actions">
+    <button onclick="generateAd()">Submit</button>
+    <button onclick="copyAd()">Copy</button>
+  </div>
+
+  <div class="output-box" id="output">e.g.: Ready for posting</div>
+  <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
+</div>
+
+<!-- ✅ Script -->
+<script>
+  $(document).ready(function () {
+    $('#lookingFor').select2({ placeholder: "Select a category" });
+  });
+
+  function generateAd() {
+    const looking = document.getElementById('lookingFor').value;
+    const output = document.getElementById('output');
+
+    if (!looking) {
+      output.innerText = "Please select a category.";
+      return;
+    }
+
+    output.innerText = `Looking for: ${looking}`;
+  }
+
+  function copyAd() {
+    const output = document.getElementById('output');
+    const msg = document.getElementById('successMsg');
+
+    if (!output.innerText || output.innerText === "e.g.: Ready for posting") return;
+
+    navigator.clipboard.writeText(output.innerText).then(() => {
+      $('#lookingFor').val(null).trigger('change');
+      output.innerText = "e.g.: Ready for posting";
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    });
+  }
+
+  function navigateTo(page) {
+    window.location.href = page;
+  }
+</script>
+</body>
+</html>

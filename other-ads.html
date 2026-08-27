@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Other Ads</title>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <style>
+    /* Stil ayarları aynı kalabilir */
+    body {
+      background: linear-gradient(-45deg, #2c2354, #3b2e71, #442c77, #2d1b45);
+      background-size: 800% 800%;
+      animation: softMorph 30s ease infinite;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      color: white;
+      padding-top: 30px;
+    }
+
+    @keyframes softMorph {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .tab-menu {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 0 10px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tab-btn {
+      background: #3a3a3a;
+      padding: 14px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: none;
+      font-weight: bold;
+      color: white;
+      font-size: 17px;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      background: #5a5a5a;
+    }
+
+    .tab-btn.active {
+      background: #888;
+      box-shadow: 0 0 12px #00000066;
+    }
+
+    .card {
+      background: #121212;
+      padding: 60px;
+      border-radius: 30px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+      width: 95%;
+      max-width: 880px;
+      box-sizing: border-box;
+      margin-top: 130px;
+    }
+
+    .card h1 {
+      text-align: center;
+      color: #4da8ff;
+      margin-bottom: 30px;
+      font-size: 30px;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background-color: #1c1c1c;
+      color: white;
+      font-size: 16px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+      gap: 16px;
+    }
+
+    .actions button {
+      background: #4da8ff;
+      color: white;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .output-box {
+      margin-top: 20px;
+      background-color: #1c1c1c;
+      padding: 16px;
+      border-radius: 12px;
+      min-height: 50px;
+      white-space: pre-line;
+      font-size: 15px;
+    }
+
+    .success-msg {
+      margin-top: 15px;
+      text-align: center;
+      color: #d4ffd4;
+      background-color: #1f6624;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 15px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ✅ Navbar -->
+  <div class="tab-menu">
+    <button onclick="navigateTo('new-auto-ads.html')" class="tab-btn">Auto</button>
+    <button onclick="navigateTo('real-estate-ads.html')" class="tab-btn">Real Estate</button>
+    <button onclick="navigateTo('business-ads.html')" class="tab-btn">Business</button>
+    <button onclick="navigateTo('items-clothes-ads.html')" class="tab-btn">Items & Clothes</button>
+    <button onclick="navigateTo('work-ads.html')" class="tab-btn">Work</button>
+    <button onclick="navigateTo('dating-ads.html')" class="tab-btn">Dating</button>
+    <button onclick="navigateTo('other-ads.html')" class="tab-btn">Other</button>
+    <button onclick="navigateTo('illegal-items-ads.html')" class="tab-btn">Illegal Items</button>
+    <button onclick="navigateTo('reject-reasons.html')" class="tab-btn">Reject Reasons</button>
+  </div>
+
+  <!-- ✅ Card İçeriği -->
+  <div class="card">
+    <h1>Other Ads</h1>
+
+    <label for="lookingFor">Looking for:</label>
+    <select id="lookingFor">
+      <option value="">-- Select --</option>
+      <option value="Secret Weapon">Secret Weapon</option>
+      <option value="Illegal Drug">Illegal Drug</option>
+    </select>
+
+    <div class="actions">
+      <button onclick="generateAd()">Submit</button>
+      <button onclick="copyAd()">Copy</button>
+    </div>
+
+    <div class="output-box" id="output">e.g.: Ready for posting</div>
+    <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $('#lookingFor').select2({ placeholder: "Select a category" });
+    });
+
+    function generateAd() {
+      const looking = document.getElementById('lookingFor').value;
+      const output = document.getElementById('output');
+      if (!looking) {
+        output.innerText = "Please select a category.";
+        return;
+      }
+      output.innerText = `Looking for: ${looking}`;
+    }
+
+    function copyAd() {
+      const output = document.getElementById('output');
+      const msg = document.getElementById('successMsg');
+
+      if (!output.innerText || output.innerText === "e.g.: Ready for posting") return;
+
+      navigator.clipboard.writeText(output.innerText).then(() => {
+        $('#lookingFor').val(null).trigger('change');
+        output.innerText = "e.g.: Ready for posting";
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 3000);
+      });
+    }
+
+    function navigateTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Work Ads (Generator)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      background-size: 400% 400%;
+      animation: waveBG 20s ease infinite;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      color: white;
+      padding-top: 90px;
+    }
+    @keyframes waveBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .top-nav {
+      display: flex;
+      justify-content: center;
+      background-color: #1c1c1c;
+      padding: 10px 20px;
+      gap: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .top-nav a {
+      background-color: #111;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 15px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .top-nav a:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <a href="new-auto-ads.html">Auto</a>
+    <a href="real-estate-ads.html">Real Estate</a>
+    <a href="business-ads.html">Business</a>
+    <a href="items-clothes-ads.html">Items & Clothes</a>
+    <a href="work-ads.html">Work</a>
+    <a href="dating-ads.html">Dating</a>
+    <a href="other-ads.html">Other</a>
+    <a href="illegal-items-ads.html">Illegal Items</a>
+    <a href="reject-reasons-ads.html">Reject Reasons</a>
+  </div>
+
+  <div class="max-w-3xl mx-auto mt-10 bg-[#111] p-6 rounded-2xl shadow-xl">
+    <h1 class="text-3xl font-bold text-center text-blue-400 mb-4">Work Ads Generator</h1>
+    <div class="mb-4">
+      <label for="rawInput" class="block mb-1 font-semibold text-sm">Enter Work Ad Input:</label>
+      <input id="rawInput" type="text" placeholder="e.g. solar panel worker salery10k" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-sm">
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <button onclick="generateWorkAd()" class="w-full py-3 text-lg bg-[#111111] text-white font-semibold rounded-xl hover:bg-[#222222]">Submit</button>
+      <button onclick="copyAd()" class="w-full py-3 text-lg bg-[#111111] text-white font-semibold rounded-xl hover:bg-[#222222]">Copy</button>
+    </div>
+    <div id="output" class="bg-black text-white p-4 rounded-lg border border-gray-700 min-h-[60px] text-center mt-4">Ready to post ad will appear here...</div>
+    <div id="copyMsg" class="text-green-400 text-center mt-2 hidden">✅ Copied successfully!</div>
+  </div>
+
+  <script>
+    function parsePriceValue(input) {
+      const str = input.toLowerCase().replace(/\$/g, '').replace(/[^0-9kKmM.]/g, '').trim();
+      if (str.includes("m")) return parseFloat(str.replace("m", "")) * 1_000_000;
+      if (str.includes("k")) return parseFloat(str.replace("k", "")) * 1_000;
+      return parseFloat(str.replace(/,/g, ""));
+    }
+
+    function formatPrice(raw) {
+      const value = parsePriceValue(raw);
+      if (isNaN(value)) return "Negotiable";
+      if (value >= 1_000_000) {
+        const millions = (value / 1_000_000).toFixed(1).replace(/\.0$/, "");
+        return `$${millions} Million`;
+      } else {
+        return `$${value.toLocaleString("en-US").replace(/,/g, ".")}`;
+      }
+    }
+
+    function capitalizeJob(job) {
+      if (job.toLowerCase() === "dj") return "DJ";
+      return job.charAt(0).toUpperCase() + job.slice(1);
+    }
+
+    function generateWorkAd() {
+      const input = document.getElementById("rawInput").value.toLowerCase();
+      let output = "";
+
+      const hasSalary = input.includes("salary") || input.includes("salery") || input.includes("$") || input.match(/\d+[km]?/);
+      const salaryMatch = input.match(/\d+[km]?/);
+      const formattedSalary = hasSalary && salaryMatch ? formatPrice(salaryMatch[0]) : "Negotiable";
+
+      if (input.includes("looking")) {
+        const job = input.replace(/looking.*as|job|salary.*|salery.*/gi, '').trim();
+        output = `Looking for a job${job ? ` as a ${capitalizeJob(job)}` : ''}. Salary: ${formattedSalary}`;
+      } else if (input.includes("solar") || input.includes("panel")) {
+        output = `Hiring workers for solar panel plantation. Salary: ${formattedSalary}`;
+      } else if (input.includes("site") || input.includes("construction")) {
+        output = `Hiring workers at construction site. Salary: ${formattedSalary}`;
+      } else {
+        const jobMatch = input.replace(/hiring|salary.*|salery.*/gi, '').trim();
+const cleanJob = capitalizeJob(jobMatch.replace(/[^a-zA-Z\s]/g, '').trim());
+output = `Hiring a ${cleanJob}. Salary: ${formattedSalary}`;
+      }
+
+      if (!formattedSalary.endsWith("Negotiable") && !formattedSalary.includes("per") && /\d$/.test(formattedSalary)) {
+        // Remove final dot if number ends sentence
+        output = output.replace(/\.$/, "");
+      }
+
+      document.getElementById("output").innerText = output;
+    }
+
+    function copyAd() {
+      const text = document.getElementById("output").innerText;
+      if (!text || text === "Ready to post ad will appear here...") return;
+      navigator.clipboard.writeText(text).then(() => {
+        const msg = document.getElementById("copyMsg");
+        msg.classList.remove("hidden");
+        setTimeout(() => msg.classList.add("hidden"), 3000);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+/* GENEL AYARLAR */
+body {
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  background-size: 400% 400%;
+  animation: waveBG 20s ease infinite;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+@keyframes waveBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* KART GENEL */
+.card {
+  background: #121212;
+  padding: 50px 60px;
+  border-radius: 25px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+  width: 100%;
+  max-width: 650px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+/* BAŞLIK */
+.card h1, h1 {
+  text-align: center;
+  color: #4da8ff;
+  margin-bottom: 25px;
+}
+
+/* SATIR BAŞLIKLARI */
+.card label, .card p {
+  font-size: 17px;
+  margin-top: 18px;
+  display: block;
+}
+
+/* INPUTLAR */
+.card input[type="text"],
+.card input[type="number"],
+.card input[list] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #1c1c1c;
+  color: white;
+  font-size: 15px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+/* RADIO VE CHECKBOX */
+.card input[type="radio"],
+.card input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.2);
+}
+
+/* BUTONLAR */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button-row button {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #3a7bfd;
+  color: white;
+  transition: 0.3s;
+}
+
+.button-row button:hover {
+  background-color: #245edb;
+}
+
+/* OUTPUT BOX */
+.output-box {
+  margin-top: 20px;
+  background-color: #0f0f0f;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  min-height: 60px;
+  font-size: 15px;
+}
+
+/* COPY MESAJI */
+.copy-success {
+  color: #4CAF50;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 12px;
+  display: none;
+}
+
+/* EXIT - BACK BUTTON */
+.back-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-button a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #222;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.back-button a:hover {
+  background-color: #444;
+}
+.main-title {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #4da8ff;
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.menu-buttons a {
+  text-decoration: none;
+  background: #3a3a3a;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.menu-buttons a:hover {
+  background: #4da8ff;
+  color: #111;
+}
+
+.exit-button {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.exit-button a {
+  display: inline-flex;
+  align-items: center;
+  background-color: #222;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  transition: background 0.3s ease;
+}
+
+.exit-button a:hover {
+  background-color: #444;
+}
+
+.exit-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}

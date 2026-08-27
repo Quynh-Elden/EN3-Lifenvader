@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ad Creator</title>
+
+  <!-- JavaScript Modules -->
+  <script type="module">
+    import { priceFormat, getAdPrefix, buildItemLabel, buildItemListText, buildPriceText } from './rules.js';
+    window.rules = { priceFormat, getAdPrefix, buildItemLabel, buildItemListText, buildPriceText };
+  </script>
+  <script type="module" src="main.js"></script>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Style -->
+  <style>
+    .ts-control, .ts-dropdown, .ts-wrapper {
+      background-color: #1f2937 !important;
+      color: white !important;
+      border-color: #374151;
+    }
+    .ts-dropdown .active {
+      background-color: #3b82f6 !important;
+      color: white !important;
+    }
+    .ts-dropdown .option {
+      color: white !important;
+    }
+  </style>
+</head>
+<!-- Navbar Menu -->
+<div class="w-full bg-[#251b4f] py-3 flex flex-wrap justify-center gap-2 shadow-lg">
+  <button onclick="navigateTo('new-auto-ads.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Work</button>
+  <button onclick="navigateTo('dating-ads.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Dating</button>
+  <button onclick="navigateTo('other-ads.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')" class="bg-black text-white px-4 py-2 rounded-2xl hover:bg-gray-800 transition">Reject Reasons</button>
+</div>
+
+<body class="bg-gradient-to-br from-gray-900 via-indigo-900 to-black min-h-screen text-white font-sans p-4">
+  <div class="max-w-3xl mx-auto bg-black/80 rounded-2xl shadow-xl p-6 space-y-6">
+    <h1 class="text-3xl font-bold text-center text-blue-400">Items & Clothes Ads</h1>
+     <div>
+<label for="itemSearch" class="block mt-4 text-sm font-semibold text-white">🔍 Search for an Item:</label>
+  <<input
+  type="text"
+  id="itemSearch"
+  placeholder="Type to search..."
+  class="w-full p-2 rounded-lg bg-black text-white border border-white"
+/>
+
+  <ul id="searchResults" class="mt-2 p-2 rounded-lg max-h-60 overflow-y-auto hidden"></ul>
+</div>
+
+   <!-- Ad Type Buttons -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+  <button class="ad-type-btn bg-black text-white border border-white px-4 py-2 rounded-2xl text-sm hover:bg-gray-800 transition" data-type="Buying">Buying</button>
+  <button class="ad-type-btn bg-black text-white border border-white px-4 py-2 rounded-2xl text-sm hover:bg-gray-800 transition" data-type="Selling">Selling</button>
+  <button class="ad-type-btn bg-black text-white border border-white px-4 py-2 rounded-2xl text-sm hover:bg-gray-800 transition" data-type="Selling or Trading">Selling or Trading</button>
+  <button class="ad-type-btn bg-black text-white border border-white px-4 py-2 rounded-2xl text-sm hover:bg-gray-800 transition" data-type="Trading">Trading</button>
+</div>
+
+     <div>
+    <!-- Item Sections Container -->
+    <div id="itemsContainer" class="space-y-4"></div>
+    <div class="flex gap-2">
+  <button id="addItemBtn" class="bg-black text-white px-2 py-1 rounded text-sm">+</button>
+  <button id="removeItemBtn" class="bg-black text-white px-2 py-1 rounded text-sm">−</button>
+</div>
+
+<input
+  type="text"
+  id="priceInput"
+  placeholder="Price or Budget"
+  class="w-full mt-4 p-2 rounded-lg bg-black text-white border border-white"
+/>
+
+<!-- Butonlar -->
+<div class="grid grid-cols-2 gap-4 mt-4">
+  <button onclick="generateAd()" class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition">
+    Generate
+  </button>
+  <button onclick="copyAd()" class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition">
+    Copy
+  </button>
+</div>
+
+<!-- Boşluk -->
+<div class="mt-4"></div>
+
+<!-- Output -->
+<div id="output" class="bg-black p-4 rounded-lg border border-gray-700 min-h-[60px] text-white">
+  Ready to post ad will appear here...
+</div>
+
+<div id="adCounter" class="text-center text-gray-300 mt-2 text-sm">Created Ads: 0</div>
+<div id="warningMsg" class="hidden text-red-500 text-center mt-2"></div>
+
+  <div id="toast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-xl shadow-lg hidden transition-opacity duration-300">
+    ✅ Copied! Ad cleared.
+  </div>
+<!-- Fuse.js for fuzzy search -->
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+
+<script type="module">
+  // item-list.js dosyasından itemList'i İÇE AKTAR
+  import { itemList } from './item-list.js'; 
+
+  // 1. Fuse.js ayarları
+  const fuse = new Fuse(itemList.map(name => ({ name })), {
+    includeScore: true,
+    threshold: 0.4,
+    keys: ["name"]
+  });
+
+  document.getElementById("itemSearch").addEventListener("input", function () {
+    const query = this.value.trim();
+    // ... (Arama kodunun geri kalanı aynı) ...
+    const results = query ? fuse.search(query).slice(0, 20) : [];
+    
+    // ... (Geri kalan arama mantığı kodunuz buraya gelir) ...
+    const list = document.getElementById("searchResults");
+    list.innerHTML = "";
+    list.classList.remove("hidden");
+
+    if (results.length > 0) {
+      results.forEach(({ item }) => {
+        const li = document.createElement("li");
+        li.textContent = item.name;
+        li.className = "px-2 py-1 hover:bg-blue-600 rounded cursor-pointer";
+
+        li.addEventListener("click", () => {
+          document.getElementById("itemSearch").value = item.name;
+
+          const selects = document.querySelectorAll(".item-select");
+          for (const select of selects) {
+            if (select.value === "") {
+              const option = document.createElement("option");
+              option.value = item.name;
+              option.textContent = item.name;
+              option.selected = true;
+              select.appendChild(option);
+              break;
+            }
+          }
+
+          list.innerHTML = "";
+          list.classList.add("hidden");
+        });
+
+        list.appendChild(li);
+      });
+    } else if (query) {
+      const li = document.createElement("li");
+      li.textContent = "No matching item found.";
+      li.className = "text-red-400 px-2";
+      list.appendChild(li);
+    }
+  }); 
+  
+  // ÖNEMLİ: navigateTo fonksiyonu artik modül içinde GLOBAL'e bağlanmamalıdır.
+  // Bu nedenle navigateTo'yu bu modülün DIŞINA taşıyoruz.
+</script>
+
+<script>
+    // Bu basit, modül olmayan script bloğu, navigateTo'yu tüm sayfanın erişebileceği yere (window objesi) koyar.
+    function navigateTo(page) {
+        window.location.href = page;
+    }
+</script>
+</body>
+</html>

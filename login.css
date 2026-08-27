@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  height: 100vh;
+  background: linear-gradient(135deg, #4b0082, #1e90ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 20%, transparent 20%);
+  background-size: 50px 50px;
+  animation: wave 10s linear infinite;
+  z-index: 0;
+}
+
+@keyframes wave {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-50px, -50px);
+  }
+}
+
+.login-container {
+  position: relative;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 60px 40px;              /* YÜKSEKLİK arttı */
+  border-radius: 16px;             /* Daha yumuşak kenarlar */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  width: 400px;                    /* GENİŞLİK arttı */
+}
+
+.login-container h1 {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.login-container button {
+  width: 130px;
+  padding: 12px;
+  background-color: #3366ff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.login-container button {
+  width: 120px;
+  padding: 12px;
+  background-color: #3366ff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.login-container button:hover {
+  background-color: #254edb;
+}
+
+.login-title {
+  color: white;
+  text-align: center;
+  font-size: 28px;  /* Başlık büyüklüğü */
+}
+
+.login-container input {
+  width: 90%;
+  padding: 14px 16px;
+  margin: 12px auto;
+  font-size: 16px;
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 6px;
+  display: block;
+}

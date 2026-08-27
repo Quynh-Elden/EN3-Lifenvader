@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Business Ads</title>
+<!-- Tom Select CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+<!-- Tom Select JS -->
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+
+  <style>
+         .ts-wrapper {
+  width: 100% !important;
+  background-color: #1c1c1c !important;
+  border: 1px solid #444 !important;
+  color: white !important;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin-bottom: 12px; /* Altına boşluk */
+}
+
+.ts-control {
+  background-color: #1c1c1c !important;
+  color: white !important;
+  padding: 10px !important;
+  min-height: 42px !important;
+  font-size: 15px;
+  border: none !important;
+}
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+   body {
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  background-size: 400% 400%;
+  animation: waveBG 20s ease infinite;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  color: white;
+  padding-top: 90px; /* fixed navbar için üst boşluk */
+}
+
+    @keyframes waveBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card {
+      background: #121212;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+      width: 100%;
+      max-width: 700px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card h1 {
+      text-align: center;
+      color: #4da8ff;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background-color: #1c1c1c;
+      color: white;
+      font-size: 15px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+    }
+
+    label {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+
+.radio-group {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  flex-wrap: nowrap; /* ❗ alt alta geçmeyi engeller */
+  flex-direction: row; /* ❗ yatay dizilim */
+}
+
+.radio-group label {
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap; /* ❗ yazılar da taşmasın */
+}
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      justify-content: space-between;
+      width: 100%;
+    }
+.radio-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #4da8ff; /* checkbox mavi */
+  cursor: pointer;
+}
+
+   .actions button {
+  background-color: #111111;
+  color: #ffffff; /* parlak beyaz */
+  font-weight: bold; /* kalın yazı */
+  border: none;
+  padding: 14px 0; /* yükseklik biraz arttı */
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px; /* yazı boyutu büyüdü */
+  width: 100%;
+}
+
+     .actions button:hover {
+     background-color: #222222;
+}
+
+    .output-box {
+      margin-top: 10px;
+      background-color: #1c1c1c;
+      padding: 12px;
+      border-radius: 10px;
+      min-height: 40px;
+      white-space: pre-line;
+      width: 100%;
+    }
+
+    .success-message {
+      color: #00ff99;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .menu-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 30px;
+      width: 100%;
+    }
+
+    .menu-buttons button {
+  background-color: #111111;
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  padding: 14px 0;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  flex: 1 1 45%;
+  min-width: 140px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.menu-buttons button:hover {
+  background-color: #222222;
+}
+.ts-wrapper {
+  background-color: #1c1c1c !important;
+  border: 1px solid #444 !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+.ts-control {
+  background-color: #1c1c1c !important;
+  color: white !important;
+  padding: 8px !important;
+}
+
+.ts-dropdown {
+  background-color: #1c1c1c !important;
+  color: white !important;
+  border: 1px solid #444;
+}
+
+.ts-dropdown .active {
+  background-color: #333 !important;
+}
+.top-nav {
+  display: flex;
+  justify-content: center;      
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  background-color: #1c1c1c;
+  padding: 10px 20px;
+  gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+.top-nav button {
+  background-color: #111;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 15px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.top-nav button:hover {
+  background-color: #333;
+}
+
+/* Sayfa içeriğini aşağı kaydırmak için (çünkü üstte fixed navbar var) */
+body {
+  padding-top: 70px; /* üst menü kadar boşluk bırak */
+}
+.ad-type-btn {
+  background-color: #111;
+  color: white;
+  border: 1px solid #333;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ad-type-btn:hover {
+  background-color: #1a1a1a;
+}
+
+.ad-type-btn.active-btn {
+  border: 2px solid #facc15;
+  color: #facc15;
+}
+  </style>
+</head>
+<body>
+<div class="top-nav justify-center">
+  <button onclick="navigateTo('new-auto-ads.html')">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')">Work</button>
+  <button onclick="navigateTo('dating-ads.html')">Dating</button>
+  <button onclick="navigateTo('other-ads.html')" class="tab-btn">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')" class="tab-btn">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+</div>
+ 
+<script>
+  function navigateTo(page) {
+    window.location.href = page;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const checkboxes = document.querySelectorAll('input[name="adType"]');
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        if (cb.checked && cb.value !== 'sell_and_trade') {
+          checkboxes.forEach(other => {
+            if (other !== cb && other.value !== 'sell_and_trade') other.checked = false;
+          });
+        }
+
+        const selected = Array.from(document.querySelectorAll('input[name="adType"]:checked')).map(e => e.value);
+        const showTarget = selected.includes('sell_and_trade') || selected.includes('trade');
+        document.getElementById('targetBusinessWrapper').style.display = showTarget ? 'block' : 'none';
+      });
+    });
+  });
+
+  function generateAd() {
+    const adTypes = Array.from(document.querySelectorAll('input[name="adType"]:checked')).map(el => el.value);
+    const kind = document.getElementById('kind').value;
+    const number = document.getElementById('number').value.trim();
+    const priceInput = document.getElementById('price').value.trim();
+    const isPlantation = kind.toLowerCase().includes("plantation");
+
+    function formatPrice(value) {
+      value = value.toLowerCase().replace('$', '').trim();
+      if (value.endsWith('m')) {
+        return `$${value.replace('m', '')} Million.`;
+      } else if (value.endsWith('k')) {
+        return `$${parseInt(value.replace('k', '')) * 1000}.`;
+      } else if (value) {
+        return `$${Number(value).toLocaleString()}.`;
+      }
+      return "Negotiable.";
+    }
+
+    const formattedPrice = formatPrice(priceInput);
+    let adText = "Ready to post ad will appear here...";
+
+    const targetKind = document.getElementById('targetKind').value;
+    if ((adTypes.includes('sell_and_trade') || adTypes.includes('trade')) && targetKind) {
+      adText = adTypes.includes('sell_and_trade')
+        ? `Selling or trading ${kind} business for ${targetKind} business. Price: ${formattedPrice}`
+        : `Trading ${kind} business for ${targetKind} business.`;
+    } else if (adTypes.includes('sell') && adTypes.includes('trade')) {
+      adText = `Selling or trading ${kind} business. Price: ${formattedPrice}`;
+    } else if (adTypes.includes('sell')) {
+      adText = number && !isPlantation
+        ? `Selling ${kind} №${number}. Price: ${formattedPrice}`
+        : `Selling ${kind} business. Price: ${formattedPrice}`;
+    } else if (adTypes.includes('buy')) {
+      adText = number && !isPlantation
+        ? `Buying ${kind} №${number}. Budget: ${formattedPrice}`
+        : `Buying ${kind} business. Budget: ${formattedPrice}`;
+    } else if (adTypes.includes('trade')) {
+      adText = `Trading ${kind} business.`;
+    }
+
+    document.getElementById('result').innerText = adText;
+  }
+
+  function copyAd() {
+    const resultBox = document.getElementById('result');
+    navigator.clipboard.writeText(resultBox.innerText).then(() => {
+      document.getElementById('kind').value = "";
+      document.getElementById('number').value = "";
+      document.getElementById('price').value = "";
+      document.getElementById('targetKind').value = "";
+      resultBox.innerText = "e.g.: Ready for posting";
+      const msg = document.getElementById('successMessage');
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    });
+  }
+</script>
+
+    <!-- Kartı ortalamak için dış container -->
+    <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;">
+    <div class="card">
+    <h1>Business Ads</h1>
+<div class="flex justify-center gap-4 mt-4">
+  <button class="ad-type-btn active-btn" data-type="buy">Buying</button>
+  <button class="ad-type-btn" data-type="sell">Selling</button>
+  <button class="ad-type-btn" data-type="sell_and_trade">Selling or Trading</button>
+  <button class="ad-type-btn" data-type="trade">Trading</button>
+</div>
+
+<!-- Gizli checkbox'lar (kontrol amaçlı) -->
+<div style="display:none">
+  <input type="checkbox" name="adType" value="buy">
+  <input type="checkbox" name="adType" value="sell">
+  <input type="checkbox" name="adType" value="sell_and_trade">
+  <input type="checkbox" name="adType" value="trade">
+</div>
+
+
+    <label for="kind">Business's kind:</label>
+<select id="kind">
+  <option value="">-- Select --</option>
+  <option>24/7 Store</option>
+  <option>Ammunition Store</option>
+  <option>ATM</option>
+  <option>Bar</option>
+  <option>Burger Shop</option>
+  <option>Car Sharing</option>
+  <option>Car Wash</option>
+  <option>Chip Tuning</option>
+  <option>Clothing Shop</option>
+  <option>Cowshed</option>
+  <option>Electric Charging Station</option>
+  <option>Farm</option>
+  <option>Fight Club</option>
+  <option>Freight Train</option>
+  <option>Gas Station</option>
+  <option>Grand Elite Clothing Shop</option>
+  <option>Hair Salon</option>
+  <option>Jewellery Store</option>
+  <option>Juice Shop</option>
+  <option>Oil Well</option>
+  <option>Parking</option>
+  <option>Pet Shop</option>
+  <option>Plantation</option>
+  <option>a private</option>
+  <option>Service Station</option>
+  <option>State Object</option>
+  <option>Tattoo Studio</option>
+  <option>Taxi Company</option>
+  <option>Warehouse</option>
+  <!-- Plantation Business Types -->
+<option>10-Bed Plantation</option>
+<option>15-Bed Plantation</option>
+<option>20-Bed Plantation</option>
+
+<option>10-Bed Cabbage Plantation</option>
+<option>15-Bed Cabbage Plantation</option>
+<option>20-Bed Cabbage Plantation</option>
+
+<option>10-Bed Pineapple Plantation</option>
+<option>15-Bed Pineapple Plantation</option>
+<option>20-Bed Pineapple Plantation</option>
+
+<option>10-Bed Pumpkin Plantation</option>
+<option>15-Bed Pumpkin Plantation</option>
+<option>20-Bed Pumpkin Plantation</option>
+
+<option>10-Bed Mandarin Plantation</option>
+<option>15-Bed Mandarin Plantation</option>
+<option>20-Bed Mandarin Plantation</option>
+</select>
+
+  <div id="targetBusinessWrapper" style="display: none; width: 100%;">
+  <label for="targetKind">Target business kind:</label>
+  <select id="targetKind">
+    <option value="">-- Select target business --</option>
+    <option>24/7 Store</option>
+    <option>Ammunition Store</option>
+    <option>ATM</option>
+    <option>Bar</option>
+    <option>Burger Shop</option>
+    <option>Car Sharing</option>
+    <option>Car Wash</option>
+    <option>Chip Tuning</option>
+    <option>Clothing Shop</option>
+    <option>Cowshed</option>
+    <option>Electric Charging Station</option>
+    <option>Farm</option>
+    <option>Fight Club</option>
+    <option>Freight Train</option>
+    <option>Gas Station</option>
+    <option>Grand Elite Clothing Shop</option>
+    <option>Hair Salon</option>
+    <option>Jewellery Store</option>
+    <option>Juice Shop</option>
+    <option>Oil Well</option>
+    <option>Parking</option>
+    <option>Pet Shop</option>
+    <option>Plantation</option>
+    <option>a private</option>
+    <option>Service Station</option>
+    <option>State Object</option>
+    <option>Tattoo Studio</option>
+    <option>Taxi Company</option>
+    <option>Warehouse</option>
+     <!-- Plantation Business Types -->
+<option>10-Bed Plantation</option>
+<option>15-Bed Plantation</option>
+<option>20-Bed Plantation</option>
+
+<option>10-Bed Cabbage Plantation</option>
+<option>15-Bed Cabbage Plantation</option>
+<option>20-Bed Cabbage Plantation</option>
+
+<option>10-Bed Pineapple Plantation</option>
+<option>15-Bed Pineapple Plantation</option>
+<option>20-Bed Pineapple Plantation</option>
+
+<option>10-Bed Pumpkin Plantation</option>
+<option>15-Bed Pumpkin Plantation</option>
+<option>20-Bed Pumpkin Plantation</option>
+
+<option>10-Bed Mandarin Plantation</option>
+<option>15-Bed Mandarin Plantation</option>
+<option>20-Bed Mandarin Plantation</option>
+  </select>
+</div>
+  <label for="number">Business №:</label>
+  <input type="text" id="number" placeholder="e.g.: №1" maxlength="4">
+
+  <label for="price">Price / Budget:</label>
+  <input type="text" id="price" placeholder="e.g.: Ready for posting">
+
+  <div class="actions">
+    <button onclick="generateAd()">Submit</button>
+    <button onclick="copyAd()">Copy</button>
+  </div>
+
+  <div class="output-box" id="result">e.g.: Ready for posting</div>
+  <div class="success-message" id="successMessage">✔️ Form has been cleared.</div>
+</div>
+<script>
+  new TomSelect("#kind", {
+    create: false,
+    sortField: {
+      field: "text",
+      direction: "asc"
+    },
+    placeholder: "Search or select a business"
+  });
+
+  new TomSelect("#targetKind", {
+    create: false,
+    sortField: {
+      field: "text",
+      direction: "asc"
+    },
+    placeholder: "Search or select a target business"
+  });
+
+  document.querySelectorAll(".ad-type-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".ad-type-btn").forEach(b => b.classList.remove("active-btn"));
+    btn.classList.add("active-btn");
+    document.querySelectorAll('input[name="adType"]').forEach(i => i.checked = false);
+    const value = btn.getAttribute("data-type");
+    document.querySelector(`input[name="adType"][value="${value}"]`).checked = true;
+    const showTarget = value === "sell_and_trade" || value === "trade";
+    document.getElementById("targetBusinessWrapper").style.display = showTarget ? "block" : "none";
+  });
+});
+
+</script>
+</body>
+</html>
