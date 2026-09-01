@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Dating Ads</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  input, select, textarea { color-scheme: dark; }
+  body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-size: 400% 400%;
+    animation: waveBG 20s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; min-height: 100vh; color: white; padding-top: 90px;
+  }
+  @keyframes waveBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .top-nav {
+    display: flex; justify-content: center; flex-wrap: nowrap; overflow-x: auto;
+    background-color: #1c1c1c; padding: 10px 20px; gap: 10px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+  .top-nav button {
+    background-color: #111; color: white; font-weight: bold; border: none;
+    border-radius: 10px; padding: 10px 16px; font-size: 15px; white-space: nowrap;
+    cursor: pointer; transition: background-color 0.3s ease;
+  }
+  .top-nav button:hover { background-color: #333; }
+
+  .mode-btn {
+    background: transparent; color: white; font-weight: bold;
+    border: 2px solid #555; border-radius: 14px; padding: 10px 20px;
+    font-size: 15px; cursor: pointer; transition: all 0.2s ease;
+  }
+  .mode-btn:hover { border-color: #888; }
+  .mode-btn.active-btn { border-color: #4da8ff; box-shadow: 0 0 8px rgba(77,168,255,0.5); }
+
+  .check-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+  .check-label input { width: 16px; height: 16px; accent-color: #4da8ff; }
+
+  .field-label { font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block; }
+
+  input[type="text"], select {
+    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444;
+    background-color: #1c1c1c; color: white; font-size: 15px; box-sizing: border-box;
+  }
+
+  .card {
+    background: #121212; padding: 40px; border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 100%; max-width: 640px;
+    box-sizing: border-box;
+  }
+
+  .hint { font-size: 12px; color: #888; margin-top: 4px; }
+  .reminder-box {
+    background: #1f2937; border: 1px solid #374151; color: #cbd5e1;
+    padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-top: 16px;
+  }
+  .reminder-box b { color: #facc15; }
+  .warning-box {
+    background: #3a1f1f; border: 1px solid #8b3a3a; color: #ffb4b4;
+    padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-top: 14px; display: none;
+  }
+  .output-box {
+    margin-top: 20px; background-color: #1c1c1c; padding: 16px; border-radius: 12px;
+    min-height: 50px; white-space: pre-line; font-size: 15px;
+  }
+  .success-msg {
+    margin-top: 12px; text-align: center; color: #d4ffd4; background-color: #1f6624;
+    padding: 10px; border-radius: 10px; font-size: 14px; display: none;
+  }
+  .actions { display: flex; justify-content: center; gap: 40px; margin-top: 24px; }
+  .actions button {
+    background: transparent; border: none; color: white; font-weight: bold;
+    font-size: 16px; cursor: pointer; padding: 8px 16px; border-radius: 8px;
+  }
+  .actions button:hover { background: #1c1c1c; }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <button onclick="navigateTo('new-auto-ads.html')">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')">Work</button>
+  <button onclick="navigateTo('dating-ads.html')">Dating</button>
+  <button onclick="navigateTo('other-ads.html')">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+</div>
+
+<div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
+  <div class="card">
+    <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Dating Ads</h1>
+
+    <div class="flex justify-center gap-3 mb-6">
+      <button class="mode-btn" data-mode="fixed">Fixed phrase</button>
+      <button class="mode-btn" data-mode="person">Specific person</button>
+    </div>
+
+    <!-- Fixed phrase -->
+    <div id="fixedWrap" class="mb-4 hidden">
+      <label class="field-label" for="phraseSelect">Phrase</label>
+      <select id="phraseSelect"></select>
+      <div class="hint">Only the phrases in this list are allowed in this category — the policy does not permit free text here.</div>
+    </div>
+
+    <!-- Specific person -->
+    <div id="personWrap" class="hidden">
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="field-label" for="firstName">First Name</label>
+          <input type="text" id="firstName" placeholder="e.g. Queen">
+        </div>
+        <div>
+          <label class="field-label" for="lastName">Last Name</label>
+          <input type="text" id="lastName" placeholder="e.g. Targaryen">
+        </div>
+      </div>
+      <label class="check-label mb-2"><input type="checkbox" id="isClassified"> This person is a State Leader/Deputy AND is NOT on the LI mails leader-list</label>
+      <div class="reminder-box">
+        <b>Reminder (cannot be checked automatically):</b><br>
+        • Did you search this name in the GRAND RP mail database? If not found, reject with: "Person not found in database."<br>
+        • If a specific FAMILY name is being searched for, this category does not allow it — reject the ad.<br>
+        • If 3+ people are looking for each other (trolling), reject the ad.<br>
+        • Troll phrases like "sugar daddy", or a price/budget listed for a wife/husband → add to the phone blacklist.
+      </div>
+    </div>
+
+    <div class="actions">
+      <button onclick="generateAd()">Submit</button>
+      <button onclick="copyAd()">Copy</button>
+    </div>
+
+    <div id="warningBox" class="warning-box"></div>
+    <div id="output" class="output-box">Ready to post ad will appear here...</div>
+    <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
+  </div>
+</div>
+
+<script type="module">
+  import { buildDatingAd, FIXED_PHRASES } from './en3-rules/dating-rules.js';
+
+  window.navigateTo = (page) => { window.location.href = page; };
+
+  const phraseSelect = document.getElementById('phraseSelect');
+  FIXED_PHRASES.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.key; opt.textContent = p.label;
+    phraseSelect.appendChild(opt);
+  });
+
+  let mode = '';
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active-btn'));
+      btn.classList.add('active-btn');
+      mode = btn.dataset.mode;
+      document.getElementById('fixedWrap').classList.toggle('hidden', mode !== 'fixed');
+      document.getElementById('personWrap').classList.toggle('hidden', mode !== 'person');
+    });
+  });
+
+  function showWarning(msg) {
+    const box = document.getElementById('warningBox');
+    if (!msg) { box.style.display = 'none'; box.innerText = ''; return; }
+    box.innerText = msg;
+    box.style.display = 'block';
+  }
+
+  window.generateAd = function () {
+    showWarning('');
+    if (!mode) { showWarning('Please select "Fixed phrase" or "Specific person".'); return; }
+
+    const state = {
+      mode,
+      phraseKey: phraseSelect.value,
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      isClassifiedPerson: document.getElementById('isClassified').checked,
+    };
+
+    const { text, error } = buildDatingAd(state);
+    if (error) { showWarning(error); return; }
+    document.getElementById('output').innerText = text;
+  };
+
+  function resetForm() {
+    mode = '';
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active-btn'));
+    document.getElementById('fixedWrap').classList.add('hidden');
+    document.getElementById('personWrap').classList.add('hidden');
+    phraseSelect.value = FIXED_PHRASES[0].key;
+    document.getElementById('firstName').value = '';
+    document.getElementById('lastName').value = '';
+    document.getElementById('isClassified').checked = false;
+    showWarning('');
+  }
+
+  window.copyAd = function () {
+    const output = document.getElementById('output');
+    const msg = document.getElementById('successMsg');
+    if (!output.innerText || output.innerText === 'Ready to post ad will appear here...') return;
+    navigator.clipboard.writeText(output.innerText).then(() => {
+      output.innerText = 'Ready to post ad will appear here...';
+      msg.style.display = 'block';
+      setTimeout(() => (msg.style.display = 'none'), 3000);
+      resetForm();
+    });
+  };
+</script>
+</body>
+</html>
