@@ -1,465 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Real Estate Ads</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    input, select, textarea {
-      color-scheme: dark;
-    }
+<meta charset="UTF-8" />
+<title>Real Estate Ads</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  input, select, textarea { color-scheme: dark; }
+  body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-size: 400% 400%;
+    animation: waveBG 20s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; min-height: 100vh; color: white; padding-top: 90px;
+  }
+  @keyframes waveBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .top-nav {
+    display: flex; justify-content: center; flex-wrap: nowrap; overflow-x: auto;
+    background-color: #1c1c1c; padding: 10px 20px; gap: 10px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+  .top-nav button {
+    background-color: #111; color: white; font-weight: bold; border: none;
+    border-radius: 10px; padding: 10px 16px; font-size: 15px; white-space: nowrap;
+    cursor: pointer; transition: background-color 0.3s ease;
+  }
+  .top-nav button:hover { background-color: #333; }
 
-.active-btn {
-  border: 3px solid #facc15 !important; /* daha kalın sarı kenarlık */
-  box-shadow: 0 0 8px #facc15 !important; /* sarı parlaklık efekti */
-  background-color: #111 !important;
-  color: white !important;
-}
-    .top-nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      background-color: #1c1c1c;
-      padding: 10px 20px;
-      gap: 10px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-    }
+  .ad-type-btn {
+    background: transparent; color: white; font-weight: bold;
+    border: 2px solid #555; border-radius: 14px; padding: 10px 20px;
+    font-size: 15px; cursor: pointer; transition: all 0.2s ease;
+  }
+  .ad-type-btn:hover { border-color: #888; }
+  .ad-type-btn.active-btn { border-color: #4da8ff; box-shadow: 0 0 8px rgba(77,168,255,0.5); }
 
-    .top-nav a {
-      background-color: #111;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 16px;
-      font-size: 15px;
-      white-space: nowrap;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+  .prop-type-label {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+  }
+  .prop-type-label input[type="checkbox"] { width: 16px; height: 16px; accent-color: #4da8ff; }
 
-    .top-nav a:hover {
-      background-color: #333;
-    }
+  .field-label { font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block; }
 
-    @keyframes waveBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+  input[type="text"], input[type="number"], select {
+    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444;
+    background-color: #1c1c1c; color: white; font-size: 15px; box-sizing: border-box;
+  }
+  select:disabled, input:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .simple-btn {
-      background-color: #111111;
-      color: #ffffff;
-      font-weight: bold;
-      border: none;
-      padding: 14px 0;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 16px;
-      width: 100%;
-    }
+  .card {
+    background: #121212; padding: 40px; border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 100%; max-width: 760px;
+    box-sizing: border-box;
+  }
 
-    .simple-btn:hover {
-      background-color: #222222;
-    }
-  </style>
+  .hint { font-size: 12px; color: #888; margin-top: 4px; }
+  .warning-box {
+    background: #3a1f1f; border: 1px solid #8b3a3a; color: #ffb4b4;
+    padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-top: 14px; display: none;
+  }
+  .output-box {
+    margin-top: 20px; background-color: #1c1c1c; padding: 16px; border-radius: 12px;
+    min-height: 50px; white-space: pre-line; font-size: 15px;
+  }
+  .success-msg {
+    margin-top: 12px; text-align: center; color: #d4ffd4; background-color: #1f6624;
+    padding: 10px; border-radius: 10px; font-size: 14px; display: none;
+  }
+  .actions { display: flex; justify-content: center; gap: 40px; margin-top: 24px; }
+  .actions button {
+    background: transparent; border: none; color: white; font-weight: bold;
+    font-size: 16px; cursor: pointer; padding: 8px 16px; border-radius: 8px;
+  }
+  .actions button:hover { background: #1c1c1c; }
+</style>
 </head>
+<body>
 
-<body style="background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); background-size: 400% 400%; animation: waveBG 20s ease infinite; font-family: 'Segoe UI', sans-serif; margin: 0; min-height: 100vh; color: white; padding-top: 90px;">
-
-  <!-- ✅ Navbar -->
-  <div class="top-nav">
-    <a href="new-auto-ads.html">Auto</a>
-    <a href="real-estate-ads.html">Real Estate</a>
-    <a href="business-ads.html">Business</a>
-    <a href="items-clothes-ads.html">Items & Clothes</a>
-    <a href="work-ads.html">Work</a>
-    <a href="dating-ads.html">Dating</a>
-    <a href="other-ads.html">Other</a>
-    <a href="illegal-items-ads.html">Illegal Items</a>
-    <a href="reject-reasons.html">Reject Reasons</a>
-  </div>
-
-  <!-- ✅ Kart Container -->
-  <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;">
-    <div class="bg-[#111111] w-full max-w-3xl rounded-2xl shadow-xl p-6 space-y-6">
-
-  <!-- ✅ İçerik -->
-<div class="max-w-3xl mx-auto bg-[#111111] rounded-2xl shadow-xl p-6 space-y-6">
-
-  <!-- Title -->
-  <h1 class="text-3xl font-bold text-center text-blue-400 mb-4">Real Estate Ads</h1>
-
-    <!-- Ad Type Section (YAN YANA & ŞIK) -->
-<div class="flex justify-center flex-wrap gap-3 mt-4">
-  <button class="ad-type-btn px-5 py-2 rounded-xl border border-white text-white font-semibold" data-type="Buying">Buying</button>
-  <button class="ad-type-btn px-5 py-2 rounded-xl border border-white text-white font-semibold" data-type="Selling">Selling</button>
-  <button class="ad-type-btn px-5 py-2 rounded-xl border border-white text-white font-semibold" data-type="Renting out">Renting out</button>
-  <button class="ad-type-btn px-5 py-2 rounded-xl border border-white text-white font-semibold" data-type="Looking to rent">Looking to rent</button>
+<div class="top-nav">
+  <button onclick="navigateTo('new-auto-ads.html')">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')">Work</button>
+  <button onclick="navigateTo('dating-ads.html')">Dating</button>
+  <button onclick="navigateTo('other-ads.html')">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
 </div>
-    <!-- Property Type Section -->
-<div class="space-y-4">
-  <label class="block font-semibold text-center">Property Type:</label>
-  <div class="flex justify-center gap-6 flex-wrap">
-<label class="flex items-center gap-2 text-lg">
-  <input type="checkbox" name="propertyTypeChoice" value="House" class="w-5 h-5"> House
-</label>
-<label class="flex items-center gap-2 text-lg">
-  <input type="checkbox" name="propertyTypeChoice" value="Apartment" class="w-5 h-5"> Apartment
-</label>
-<label class="flex items-center gap-2 text-lg">
-  <input type="checkbox" name="propertyTypeChoice" value="Mansion" class="w-5 h-5"> Mansion
-</label>
-<label class="flex items-center gap-2 text-lg">
-  <input type="checkbox" name="propertyTypeChoice" value="Casino Penthouse" class="w-5 h-5"> Casino Penthouse
-</label>
 
-    <div class="flex flex-wrap items-start gap-6">
-  <!-- Property № -->
-  <div class="flex flex-col">
-    <label for="propertyNumber" class="text-sm font-semibold">Property №:</label>
-    <input id="propertyNumber" type="text" maxlength="15" placeholder="e.g. 2345"
-      class="w-40 p-2 rounded-md text-sm text-white bg-gray-900 border border-gray-700 placeholder-gray-400">
-  </div>
+<div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
+  <div class="card">
+    <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Real Estate Ads</h1>
 
-  <!-- Garden -->
-  <div class="flex flex-col items-center">
-    <label class="text-sm font-semibold">Garden</label>
-    <input type="checkbox" value="Garden" class="w-4 h-4 mt-1 accent-blue-500">
-  </div>
+    <!-- Ad type -->
+    <div class="flex justify-center gap-3 flex-wrap mb-6">
+      <button class="ad-type-btn" data-type="Buying">Buying</button>
+      <button class="ad-type-btn" data-type="Selling">Selling</button>
+      <button class="ad-type-btn" data-type="Renting out">Renting out</button>
+      <button class="ad-type-btn" data-type="Renting">Looking to rent</button>
+    </div>
 
-  <!-- Garage -->
-  <div class="flex flex-col">
-    <label for="garage" class="text-sm font-semibold">Garage Space:</label>
-    <select id="garage"
-      class="w-32 p-2 text-sm bg-gray-900 border border-gray-700 rounded text-white">
-      <option value="">--</option>
-      <option value="2 g.s.">2 g.s.</option>
-      <option value="5 g.s.">5 g.s.</option>
-      <option value="9 g.s.">9 g.s.</option>
-      <option value="25 g.s.">25 g.s.</option>
-      <option value="30 g.s.">30 g.s.</option>
-    </select>
-  </div>
+    <!-- Property type -->
+    <div class="text-center mb-2 font-semibold">Property Type:</div>
+    <div class="flex justify-center gap-6 flex-wrap mb-6">
+      <label class="prop-type-label"><input type="radio" name="propType" value="house" checked> House</label>
+      <label class="prop-type-label"><input type="radio" name="propType" value="apartment"> Apartment</label>
+      <label class="prop-type-label"><input type="radio" name="propType" value="mansion"> Mansion</label>
+      <label class="prop-type-label"><input type="radio" name="propType" value="casino"> Casino Penthouse</label>
+    </div>
 
-  <!-- Warehouse -->
-  <div class="flex flex-col">
-    <label for="warehouse" class="text-sm font-semibold">Warehouse Space:</label>
-    <select id="warehouse"
-      class="w-32 p-2 text-sm bg-gray-900 border border-gray-700 rounded text-white">
-      <option value="">--</option>
-      <option value="3 w.h.">3 w.h.</option>
-      <option value="4 w.h.">4 w.h.</option>
-      <option value="5 w.h.">5 w.h.</option>
-    </select>
-  </div>
-</div>
-      <div class="flex justify-center gap-6 grid grid-cols-4">
-         <label class="flex items-center gap-2">
-          <input type="checkbox" value="Custom Interior" class="w-5 h-5"> Custom Interior
-        </label>
-        <label class="flex items-center gap-2">
-          <input type="checkbox" value="Insurance" class="w-5 h-5"> Insurance
-        </label>
-        <label class="flex items-center gap-2">
-          <input type="checkbox" value="Helipad" class="w-5 h-5"> Helipad
-        </label>
-        <label class="flex items-center gap-2">
-          <input type="checkbox" value="Tennis Court" class="w-5 h-5"> Tennis Court
-        </label>
-        <label class="flex items-center gap-2">
-          <input type="checkbox" value="Long Driveway" class="w-5 h-5"> Long Driveway
-        </label>
-        <label class="flex items-center gap-2">
-          <input type="checkbox" value="Swimming Pool" class="w-5 h-5"> Swimming Pool
-        </label>
-        <label class="flex items-center gap-2">
-          View:
-          <select name="view" class="bg-gray-900 border border-gray-700 text-white rounded px-2 py-1">
-            <option>--</option>
-            <option>Nice</option>
-            <option>Beautiful</option>
-            <option>Great</option>
-            <option>Good</option>
-          </select>
-        </label>
+    <!-- Number / quantity row -->
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="field-label" for="propNumber">Property №  (varsa)</label>
+        <input type="number" id="propNumber" placeholder="e.g. 2345">
+        <div class="hint">Numara verilirse sadece 1 mulk ilan edilebilir.</div>
+      </div>
+      <div id="quantityWrap">
+        <label class="field-label" for="propQuantity">Quantity (numara yoksa, max 3)</label>
+        <select id="propQuantity">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
       </div>
     </div>
 
-<!-- ✅ Location + Price yan yana -->
-<div class="flex flex-wrap gap-4 mt-6">
-  <!-- Location -->
-  <div class="flex-1 min-w-[180px]">
-    <label for="location" class="block font-semibold mb-1 text-sm">Location:</label>
-    <select id="location" class="w-full p-2 rounded-lg bg-gray-900 border border-gray-700 text-white text-sm">
-      <option value="">Select</option>
-      <option>in the Casino</option>
-      <option>in Cayo Perico Island</option>
-      <option>near the Church</option>
-      <option>in Del Perro</option>
-      <option>in Downtown Vinewood</option>
-      <option>in Eclipse Tower</option>
-      <option>in El Burro Heights</option>
-      <option>near Fight Club</option>
-      <option>near Hospital</option>
-      <option>near Sandy Hospital</option>
-      <option>in Little Seoul</option>
-      <option>near LifeInvader</option>
-      <option>in Mirror Park</option>
-      <option>in Residential complex</option>
-      <option>in Richards Majestic</option>
-      <option>in Richman</option>
-      <option>in Rockford Hills</option>
-      <option>in Pacific Bluffs Country Club</option>
-      <option>in Paleto Bay</option>
-      <option>near Pillbox Hill</option>
-      <option>near Postal</option>
-      <option>in Rancho</option>
-      <option>in Sandy Shores</option>
-      <option>near Sandy Shores</option>
-      <option>near Stock Exchange</option>
-      <option>in Vespucci Canals</option>
-      <option>in Vinewood Hills</option>
-      <option>in West Vinewood</option>
-      <option>in ghetto</option>
-      <option>near beach</option>
-      <option>near beach market</option>
-      <option>near stadium</option>
-      <option>near fire station</option>
-      <option>near train station</option>
-      <option>near post office</option>
-      <option>in city</option>
-    </select>
+    <!-- Apartment complex (sadece apartment + numara varsa gorunur) -->
+    <div id="complexWrap" class="mb-4 hidden">
+      <label class="field-label" for="apartmentComplex">Apartment Complex</label>
+      <select id="apartmentComplex">
+        <option value="">-- Select --</option>
+        <option>Eclipse Towers</option>
+        <option>Tinsel Towers</option>
+        <option>Del Perro Heights</option>
+        <option>Richards Majestic</option>
+        <option>Tinkle Building</option>
+        <option>3 Alta Street</option>
+        <option>Celltowa Building</option>
+      </select>
+      <div class="hint">EN3 belgesi "8 kompleks" diyor ama sadece 7'sini isimlendiriyor — 8. kompleks adi eklenmeyi bekliyor.</div>
+    </div>
+
+    <!-- Garden / Garage / Warehouse -->
+    <div class="grid grid-cols-3 gap-4 mb-4 items-end">
+      <label class="prop-type-label"><input type="checkbox" id="garden"> Garden</label>
+      <div>
+        <label class="field-label" for="garageSpace">Garage Space</label>
+        <select id="garageSpace">
+          <option value="">--</option>
+          <option>2 g.s.</option><option>5 g.s.</option><option>9 g.s.</option>
+          <option>25 g.s.</option><option>30 g.s.</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label" for="warehouse">Warehouse Space</label>
+        <select id="warehouse">
+          <option value="">--</option>
+          <option>3 w.h.</option><option>4 w.h.</option><option>5 w.h.</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Feature checkboxes -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+      <label class="prop-type-label"><input type="checkbox" id="customInterior"> Custom Interior</label>
+      <label class="prop-type-label"><input type="checkbox" id="insurance"> Insurance</label>
+      <label class="prop-type-label"><input type="checkbox" id="helipad"> Helipad</label>
+      <label class="prop-type-label"><input type="checkbox" id="tennisCourt"> Tennis Court</label>
+    </div>
+    <div id="insuranceHint" class="hint mb-4 hidden">Apartmanlar sigortalanamaz (EN3), bu yuzden Apartment secildiginde bu kutu devre disi.</div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 items-end">
+      <label class="prop-type-label"><input type="checkbox" id="driveway"> Driveway</label>
+      <select id="drivewaySize">
+        <option value="long">long</option>
+        <option value="large">large</option>
+      </select>
+      <label class="prop-type-label"><input type="checkbox" id="swimmingPool"> Swimming Pool</label>
+      <label class="prop-type-label"><input type="checkbox" id="backyard"> Backyard</label>
+    </div>
+    <div class="grid grid-cols-1 mb-4">
+      <div>
+        <label class="field-label" for="viewSelect">View</label>
+        <select id="viewSelect">
+          <option value="">--</option>
+          <option value="nice">nice</option>
+          <option value="beautiful">beautiful</option>
+          <option value="great">great</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Location -->
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="field-label" for="locationPrep">Preposition</label>
+        <select id="locationPrep">
+          <option value="in">in</option>
+          <option value="near">near</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label" for="locationInput">Location</label>
+        <input type="text" id="locationInput" list="locationOptions" placeholder="e.g. Vinewood Hills / the city">
+        <datalist id="locationOptions"></datalist>
+      </div>
+    </div>
+
+    <!-- Rental period (sadece Renting out / Looking to rent icin) -->
+    <div id="rentalPeriodWrap" class="grid grid-cols-2 gap-4 mb-4 hidden">
+      <div>
+        <label class="field-label" for="periodType">Rental Period</label>
+        <select id="periodType">
+          <option value="">-- Select --</option>
+          <option value="per week">per week</option>
+          <option value="per day">for X day(s)</option>
+        </select>
+      </div>
+      <div id="periodDaysWrap" class="hidden">
+        <label class="field-label" for="periodDays">Days (1-21)</label>
+        <input type="number" id="periodDays" min="1" max="21" placeholder="e.g. 3">
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-4">
+      <label class="field-label" for="priceInput">Price / Budget / Rent</label>
+      <input type="text" id="priceInput" placeholder="$250k or $1.5m (bos birakilirsa Negotiable)">
+    </div>
+
+    <div class="actions">
+      <button onclick="generateAd()">Submit</button>
+      <button onclick="copyAd()">Copy</button>
+    </div>
+
+    <div id="warningBox" class="warning-box"></div>
+    <div id="output" class="output-box">Ready to post ad will appear here...</div>
+    <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
   </div>
-
-  <!-- Price -->
-  <div class="flex-1 min-w-[180px]">
-    <label for="price" class="block font-semibold mb-1 text-sm">Price / Budget:</label>
-    <input id="price" type="text" placeholder="$250k or $1.5m"
-      class="w-full p-2 rounded-lg text-white bg-gray-900 border border-gray-700 placeholder-gray-400 text-sm">
-  </div>
-</div>
-    
-<!-- ✅ Generate + Copy Buttons -->
-<div class="grid grid-cols-2 gap-4 mt-6 w-full">
-  <button onclick="generateAd()" 
-    class="w-full py-3 text-lg bg-[#111111] text-white font-semibold rounded-xl hover:bg-[#222222]">
-    Submit
-  </button>
-  <button onclick="copyAd()" 
-    class="w-full py-3 text-lg bg-[#111111] text-white font-semibold rounded-xl hover:bg-[#222222]">
-    Copy
-  </button>
 </div>
 
-<!-- ✅ Output bölümü -->
-<div id="output" 
-  class="bg-black text-white p-4 rounded-lg border border-gray-700 min-h-[60px] text-center mt-4">
-  Ready to post ad will appear here...
-</div>
-<div id="copyMsg" class="text-green-400 text-center mt-2 hidden">✅ Copied successfully!</div>
+<script type="module">
+  import { buildRealEstateAd, OFFICIAL_LOCATIONS, UNOFFICIAL_LOCATIONS } from './en3-rules/real-estate-rules.js';
 
-<script>
-function parsePriceValue(price) {
-  const str = price.toLowerCase().replace(/\$/g, "").replace(/\s+/g, "").trim();
-  if (str.includes("m")) return parseFloat(str.replace("m", "")) * 1_000_000;
-  if (str.includes("k")) return parseFloat(str.replace("k", "")) * 1_000;
-  return parseFloat(str.replace(/,/g, ""));
-}
+  window.navigateTo = (page) => { window.location.href = page; };
 
-function formatPrice(raw) {
-  const value = parsePriceValue(raw);
-  if (isNaN(value)) return "Negotiable";
-  if (value >= 1_000_000) {
-    const millions = (value / 1_000_000).toFixed(1).replace(/\.0$/, "");
-    return `$${millions} Million`;
-  } else {
-    return `$${value.toLocaleString("en-US").replace(/,/g, ".")}`;
+  // --- locations datalist doldur ---
+  const locList = document.getElementById('locationOptions');
+  [...OFFICIAL_LOCATIONS, ...UNOFFICIAL_LOCATIONS].forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    locList.appendChild(opt);
+  });
+
+  // --- ad type secimi ---
+  let adType = '';
+  document.querySelectorAll('.ad-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+      btn.classList.add('active-btn');
+      adType = btn.dataset.type;
+      document.getElementById('rentalPeriodWrap').classList.toggle('hidden', !adType.toLowerCase().includes('renting'));
+    });
+  });
+
+  // --- property type: apartment secilince insurance kapansin, complex alani acilsin ---
+  function currentPropertyType() {
+    return document.querySelector('input[name="propType"]:checked').value;
   }
-}
+  function refreshPropertyTypeUI() {
+    const type = currentPropertyType();
+    const insurance = document.getElementById('insurance');
+    const insuranceHint = document.getElementById('insuranceHint');
+    if (type === 'apartment') {
+      insurance.checked = false;
+      insurance.disabled = true;
+      insuranceHint.classList.remove('hidden');
+    } else {
+      insurance.disabled = false;
+      insuranceHint.classList.add('hidden');
+    }
+    updateComplexVisibility();
+  }
+  document.querySelectorAll('input[name="propType"]').forEach(r => r.addEventListener('change', refreshPropertyTypeUI));
 
-function generateAd() {
-  const typeBtn = document.querySelector('.ad-type-btn.bg-blue-700');
-  const type = typeBtn?.dataset.type || 'Listing';
+  // --- numara / quantity karsilikli disable ---
+  const propNumber = document.getElementById('propNumber');
+  const quantityWrap = document.getElementById('quantityWrap');
+  const propQuantity = document.getElementById('propQuantity');
+  propNumber.addEventListener('input', () => {
+    const hasNumber = propNumber.value.trim() !== '';
+    quantityWrap.classList.toggle('hidden', hasNumber);
+    if (hasNumber) propQuantity.value = '1';
+    updateComplexVisibility();
+  });
 
-  const propertyNumberRaw = document.getElementById("propertyNumber").value.trim();
-  const location = document.getElementById("location").value.trim();
-  const price = document.getElementById("price").value.trim();
+  function updateComplexVisibility() {
+    const type = currentPropertyType();
+    const hasNumber = propNumber.value.trim() !== '';
+    document.getElementById('complexWrap').classList.toggle('hidden', !(type === 'apartment' && hasNumber));
+  }
 
-  const rawNumbers = propertyNumberRaw
-  ? propertyNumberRaw.split(/,|and/i).map(p => p.trim()).slice(0, 2)
-  : [];
+  // --- driveway checkbox <-> size select ---
+  document.getElementById('driveway').addEventListener('change', (e) => {
+    document.getElementById('drivewaySize').disabled = !e.target.checked;
+  });
 
-const propertyNumbers = rawNumbers.map(n => `№${n}`);
+  // --- rental period: gun alani sadece "per day" secilince ---
+  document.getElementById('periodType').addEventListener('change', (e) => {
+    document.getElementById('periodDaysWrap').classList.toggle('hidden', e.target.value !== 'per day');
+  });
 
-const hasNumber = propertyNumbers.length > 0;
-const isDoubleNumber = propertyNumbers.length === 2;
+  refreshPropertyTypeUI();
 
-  // ✅ Property türü
-  const selectedTypes = Array.from(document.querySelectorAll('input[name="propertyTypeChoice"]:checked'))
-    .map(el => el.value.toLowerCase());
+  function showWarning(msg) {
+    const box = document.getElementById('warningBox');
+    if (!msg) { box.style.display = 'none'; box.innerText = ''; return; }
+    box.innerText = msg;
+    box.style.display = 'block';
+  }
 
-  const pluralMap = {
-    "house": "houses",
-    "apartment": "apartments",
-    "mansion": "mansions",
-    "casino penthouse": "casino penthouses"
+  window.generateAd = function () {
+    showWarning('');
+    if (!adType) { showWarning('Lutfen ilan turunu secin (Buying / Selling / Renting out / Looking to rent).'); return; }
+
+    const propertyType = currentPropertyType();
+    const number = propNumber.value.trim() ? parseInt(propNumber.value.trim(), 10) : null;
+    const quantity = number ? 1 : parseInt(propQuantity.value, 10);
+    const complex = document.getElementById('apartmentComplex').value || null;
+
+    const state = {
+      adType,
+      propertyType,
+      number,
+      quantity,
+      complex,
+      garden: document.getElementById('garden').checked,
+      garageSpace: document.getElementById('garageSpace').value || null,
+      warehouse: document.getElementById('warehouse').value || null,
+      customInterior: document.getElementById('customInterior').checked,
+      insurance: document.getElementById('insurance').checked,
+      helipad: document.getElementById('helipad').checked,
+      swimmingPool: document.getElementById('swimmingPool').checked,
+      tennisCourt: document.getElementById('tennisCourt').checked,
+      driveway: document.getElementById('driveway').checked,
+      drivewaySize: document.getElementById('drivewaySize').value,
+      backyard: document.getElementById('backyard').checked,
+      view: document.getElementById('viewSelect').value || null,
+      location: document.getElementById('locationInput').value.trim() || null,
+      locationPreposition: document.getElementById('locationPrep').value,
+      priceRaw: document.getElementById('priceInput').value.trim(),
+      rentalPeriod: {
+        periodType: document.getElementById('periodType').value || null,
+        days: parseInt(document.getElementById('periodDays').value, 10) || null,
+      },
+    };
+
+    const { text, error } = buildRealEstateAd(state);
+    if (error) { showWarning(error); return; }
+    document.getElementById('output').innerText = text;
   };
 
-  let typeText = "a property";
+  function resetForm() {
+    // ilan turu butonlari
+    adType = '';
+    document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+    document.getElementById('rentalPeriodWrap').classList.add('hidden');
 
-  if (selectedTypes.length === 1) {
-    let single = selectedTypes[0];
-    if (single === "villa") single = "mansion";
+    // mulk tipi -> House'a geri don
+    document.querySelector('input[name="propType"][value="house"]').checked = true;
 
-    if (isDoubleNumber && pluralMap[single]) {
-      typeText = pluralMap[single];
-    } else if (single === "casino penthouse") {
-      typeText = hasNumber ? "Casino penthouse" : "a Casino penthouse";
-    } else {
-      const article = /^[aeiou]/.test(single) ? "an" : "a";
-      typeText = hasNumber ? single : `${article} ${single}`;
-    }
+    // numara / miktar
+    propNumber.value = '';
+    propQuantity.value = '1';
+    quantityWrap.classList.remove('hidden');
+    document.getElementById('apartmentComplex').value = '';
 
-  } else if (selectedTypes.length === 2) {
-    const typesFormatted = selectedTypes.map(t => {
-      if (t === "villa") t = "mansion";
-      if (t === "casino penthouse") return hasNumber ? "Casino penthouse" : "a Casino penthouse";
-      const art = /^[aeiou]/.test(t) ? "an" : "a";
-      return hasNumber ? t : `${art} ${t}`;
+    // ozellikler
+    document.getElementById('garden').checked = false;
+    document.getElementById('garageSpace').value = '';
+    document.getElementById('warehouse').value = '';
+    document.getElementById('customInterior').checked = false;
+    document.getElementById('insurance').checked = false;
+    document.getElementById('helipad').checked = false;
+    document.getElementById('tennisCourt').checked = false;
+    document.getElementById('driveway').checked = false;
+    document.getElementById('drivewaySize').value = 'long';
+    document.getElementById('drivewaySize').disabled = true;
+    document.getElementById('swimmingPool').checked = false;
+    document.getElementById('backyard').checked = false;
+    document.getElementById('viewSelect').value = '';
+
+    // lokasyon
+    document.getElementById('locationPrep').value = 'in';
+    document.getElementById('locationInput').value = '';
+
+    // kiralama
+    document.getElementById('periodType').value = '';
+    document.getElementById('periodDays').value = '';
+    document.getElementById('periodDaysWrap').classList.add('hidden');
+
+    // fiyat
+    document.getElementById('priceInput').value = '';
+
+    refreshPropertyTypeUI();
+    showWarning('');
+  }
+
+  window.copyAd = function () {
+    const output = document.getElementById('output');
+    const msg = document.getElementById('successMsg');
+    if (!output.innerText || output.innerText === 'Ready to post ad will appear here...') return;
+    navigator.clipboard.writeText(output.innerText).then(() => {
+      output.innerText = 'Ready to post ad will appear here...';
+      msg.style.display = 'block';
+      setTimeout(() => (msg.style.display = 'none'), 3000);
+      resetForm();
     });
-    typeText = `${typesFormatted[0]} and ${typesFormatted[1]}`;
-  }
-
-  // ✅ Başlık
-  let ad = `${type} ${typeText}`;
-
-  if (propertyNumbers.length === 1) {
-    ad += ` ${propertyNumbers[0]}`;
-  } else if (propertyNumbers.length === 2) {
-    ad += ` ${propertyNumbers[0]} and ${propertyNumbers[1]}`;
-  }
-
-  // ✅ Özellikler
-  const features = [];
-
-  if (document.querySelector('input[value="Garden"]')?.checked) features.push("a garden");
-
-  const garage = document.getElementById("garage")?.value;
-  if (["2 g.s.", "5 g.s.", "9 g.s.", "25 g.s."].includes(garage)) features.push(garage);
-
-  const warehouse = document.getElementById("warehouse")?.value;
-  if (["3 w.h.", "4 w.h.", "5 w.h."].includes(warehouse)) features.push(warehouse);
-
-  if (document.querySelector('input[value="Custom Interior"]')?.checked) features.push("custom interior");
-  if (document.querySelector('input[value="Insurance"]')?.checked) features.push("insurance");
-
-  const extras = ["Helipad", "Tennis Court", "Long Driveway", "Swimming Pool"];
-  extras.forEach(val => {
-    if (document.querySelector(`input[value="${val}"]`)?.checked) {
-      features.push(val.toLowerCase());
-    }
-  });
-
-  const viewSelect = document.querySelector("select[name='view']");
-  const view = viewSelect ? viewSelect.value : "";
-  if (view && view !== "--") {
-  const art = /^[aeiou]/.test(view.toLowerCase()) ? "an" : "a";
-  features.push(`${art} ${view.toLowerCase()} view`);
-}
-  if (features.length > 0) {
-    ad += ` with ${features.length === 1
-      ? features[0]
-      : features.slice(0, -1).join(", ") + " and " + features[features.length - 1]}`;
-  }
-
-  // ✅ Lokasyon
-  if (location && location !== "Select Location") {
-    ad += ` ${location}`;
-  }
-
-  // ✅ Fiyat etiketi
-  let label = "Price";
-  if (type === "Looking to rent" || type === "Buying") label = "Budget";
-  else if (type === "Renting out") label = "Rent";
-
-  const numericPrice = parsePriceValue(price);
-  const showNegotiable = (
-    ["Selling", "Buying"].includes(type) &&
-    ((selectedTypes.includes("house") && numericPrice < 1_000_000) ||
-     (selectedTypes.includes("apartment") && numericPrice < 2_000_000))
-  );
-
-  if (!isNaN(numericPrice) && numericPrice > 0) {
-    ad += `. ${label}: ${formatPrice(price)}`;
-  } else {
-    ad += `. ${label}: Negotiable`;
-  }
-
-// ✅ Son nokta - ama rakamla bitiyorsa ekleme
-if (!/\d$/.test(ad)) {
-  ad += ".";
-}
-  // ✅ Ekrana yaz
-  document.getElementById("output").innerText = ad;
-}
-
-function copyAd() {
-  const text = document.getElementById("output").innerText;
-  if (!text || text === "Ready to post ad will appear here...") return;
-
-  navigator.clipboard.writeText(text).then(() => {
-    const msg = document.getElementById("copyMsg");
-    msg.classList.remove("hidden");
-    setTimeout(() => msg.classList.add("hidden"), 3000);
-  });
-
-  // ✅ Tüm text input ve selectleri sıfırla
-  document.querySelectorAll('input[type="text"], input[type="number"], input[type="checkbox"], input[type="radio"], select').forEach(el => {
-    if (el.type === "checkbox" || el.type === "radio") el.checked = false;
-    else el.value = "";
-  });
-
-  // ✅ Seçili buton rengini kaldır
-  document.querySelectorAll(".ad-type-btn").forEach(btn => {
-    btn.classList.remove("bg-blue-700");
-  });
-
-  // ✅ Çıktı alanını sıfırla
-  document.getElementById("output").innerText = "Ready to post ad will appear here...";
-}
-  // Buton aktiflik ayarlayıcı
-document.querySelectorAll(".ad-type-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".ad-type-btn").forEach(b => b.classList.remove("bg-blue-700"));
-    btn.classList.add("bg-blue-700");
-  });
-});
-
-function navigateTo(page) {
-  window.location.href = page;
-}
-
-document.querySelectorAll(".ad-type-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".ad-type-btn").forEach(b => b.classList.remove("active-btn"));
-      btn.classList.add("active-btn");
-    });
-  });
-</script>
-
-</body>
-</html>
-
+  };
 </script>
 </body>
 </html>
-
