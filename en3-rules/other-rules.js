@@ -4,6 +4,7 @@
 
 import { buildPriceSentence, terminate, getAdPrefix } from '../core-rules.js';
 import { PRIVATE_BUSINESSES, FAMILY_BUSINESSES } from './business-rules.js';
+import { vehicleExists } from '../vehicle-list.js';
 
 function articleFor(word) {
   return /^[aeiou]/i.test(word) ? 'an' : 'a';
@@ -81,6 +82,9 @@ export function buildWeddingAd({ person1, person2, time }) {
 export function buildCarMeetAd({ vehicleName, location }) {
   if (!location) return { text: '', error: 'Please specify a location for the car meet.' };
   if (vehicleName) {
+    if (!vehicleExists(vehicleName)) {
+      return { text: '', error: `"${vehicleName}" was not found in the vehicle list. Item not found in database.` };
+    }
     return { text: `"${vehicleName}" exclusive car meet at ${location}.`, error: null };
   }
   return { text: `Car meet at ${location}.`, error: null };
