@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Business Ads</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  input, select, textarea { color-scheme: dark; }
+  body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-size: 400% 400%;
+    animation: waveBG 20s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; min-height: 100vh; color: white; padding-top: 90px;
+  }
+  @keyframes waveBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .top-nav {
+    display: flex; justify-content: center; flex-wrap: nowrap; overflow-x: auto;
+    background-color: #1c1c1c; padding: 10px 20px; gap: 10px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+  .top-nav button {
+    background-color: #111; color: white; font-weight: bold; border: none;
+    border-radius: 10px; padding: 10px 16px; font-size: 15px; white-space: nowrap;
+    cursor: pointer; transition: background-color 0.3s ease;
+  }
+  .top-nav button:hover { background-color: #333; }
+
+  .ad-type-btn {
+    background: transparent; color: white; font-weight: bold;
+    border: 2px solid #555; border-radius: 14px; padding: 10px 18px;
+    font-size: 15px; cursor: pointer; transition: all 0.2s ease;
+  }
+  .ad-type-btn:hover { border-color: #888; }
+  .ad-type-btn.active-btn { border-color: #4da8ff; box-shadow: 0 0 8px rgba(77,168,255,0.5); }
+
+  .check-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+  .check-label input[type="radio"] { width: 16px; height: 16px; accent-color: #4da8ff; }
+
+  .field-label { font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block; }
+
+  input[type="text"], input[type="number"], select {
+    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444;
+    background-color: #1c1c1c; color: white; font-size: 15px; box-sizing: border-box;
+  }
+  select:disabled, input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .card {
+    background: #121212; padding: 40px; border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 100%; max-width: 760px;
+    box-sizing: border-box;
+  }
+
+  .hint { font-size: 12px; color: #888; margin-top: 4px; }
+  .warning-box {
+    background: #3a1f1f; border: 1px solid #8b3a3a; color: #ffb4b4;
+    padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-top: 14px; display: none;
+  }
+  .output-box {
+    margin-top: 20px; background-color: #1c1c1c; padding: 16px; border-radius: 12px;
+    min-height: 50px; white-space: pre-line; font-size: 15px;
+  }
+  .success-msg {
+    margin-top: 12px; text-align: center; color: #d4ffd4; background-color: #1f6624;
+    padding: 10px; border-radius: 10px; font-size: 14px; display: none;
+  }
+  .actions { display: flex; justify-content: center; gap: 40px; margin-top: 24px; }
+  .actions button {
+    background: transparent; border: none; color: white; font-weight: bold;
+    font-size: 16px; cursor: pointer; padding: 8px 16px; border-radius: 8px;
+  }
+  .actions button:hover { background: #1c1c1c; }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <button onclick="navigateTo('new-auto-ads.html')">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')">Work</button>
+  <button onclick="navigateTo('dating-ads.html')">Dating</button>
+  <button onclick="navigateTo('other-ads.html')">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+</div>
+
+<div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
+  <div class="card">
+    <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Business Ads</h1>
+
+    <!-- Ad type -->
+    <div class="flex justify-center gap-2 flex-wrap mb-6">
+      <button class="ad-type-btn" data-type="Buying">Buying</button>
+      <button class="ad-type-btn" data-type="Selling">Selling</button>
+      <button class="ad-type-btn" data-type="Trading">Trading</button>
+      <button class="ad-type-btn" data-type="Selling or Trading">Selling or Trading</button>
+    </div>
+
+    <!-- Business type -->
+    <div class="mb-2">
+      <label class="field-label" for="businessSelect">Business</label>
+      <select id="businessSelect">
+        <option value="">-- Select --</option>
+        <option value="Private business">Private business (isim belirtilmeden)</option>
+        <optgroup label="Private Businesses">
+        </optgroup>
+        <optgroup label="Family Businesses (takas edilemez)">
+        </optgroup>
+      </select>
+      <div id="familyHint" class="hint hidden">⚠ Aile isletmesi — sadece Buying/Selling, Trading yapilamaz.</div>
+    </div>
+
+    <!-- Plantation crop -->
+    <div id="plantationWrap" class="grid grid-cols-2 gap-4 mb-4 hidden">
+      <div>
+        <label class="field-label" for="plantationCrop">Mahsul (opsiyonel)</label>
+        <select id="plantationCrop">
+          <option value="">-- Genel "Plantation" --</option>
+          <option>Pumpkin</option>
+          <option>Cabbage</option>
+          <option>Mandarin</option>
+          <option>Pineapple</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label" for="plantationBeds">Beds sayisi</label>
+        <input type="number" id="plantationBeds" placeholder="e.g. 20">
+      </div>
+    </div>
+
+    <!-- Number / suffix -->
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="field-label" for="businessNumber">Number №  (varsa)</label>
+        <input type="number" id="businessNumber" placeholder="e.g. 269">
+      </div>
+      <div>
+        <label class="field-label" for="suffixSelect">Suffix</label>
+        <select id="suffixSelect">
+          <option value="">business (varsayilan)</option>
+          <option value="control">Control</option>
+          <option value="shares" id="sharesOption">shares (sadece uygun isletmeler)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Trade target -->
+    <div id="tradeTargetWrap" class="mb-4 hidden">
+      <label class="field-label" for="tradeTargetSelect">Takas edilecek isletme (for X)</label>
+      <select id="tradeTargetSelect">
+        <option value="">-- Select --</option>
+      </select>
+    </div>
+
+    <!-- Location -->
+    <div class="mb-4">
+      <label class="field-label" for="locationInput">Location (opsiyonel)</label>
+      <select id="locationInput">
+        <option value="">Select</option>
+        <option>in the Casino</option>
+        <option>in Cayo Perico Island</option>
+        <option>near Church</option>
+        <option>in Del Perro</option>
+        <option>in Downtown Vinewood</option>
+        <option>in Eclipse Tower</option>
+        <option>in El Burro Heights</option>
+        <option>near Fight Club</option>
+        <option>near Hospital</option>
+        <option>near Sandy Hospital</option>
+        <option>in Little Seoul</option>
+        <option>near Lifeinvader</option>
+        <option>in Mirror Park</option>
+        <option>in the residential complex</option>
+        <option>in Richards Majestic</option>
+        <option>in Richman</option>
+        <option>in Rockford Hills</option>
+        <option>in Pacific Bluffs Country Club</option>
+        <option>in Paleto Bay</option>
+        <option>near Pillbox Hill</option>
+        <option>near Postal</option>
+        <option>in Rancho</option>
+        <option>in Sandy Shores</option>
+        <option>near Sandy Shores</option>
+        <option>near Stock Exchange</option>
+        <option>in Vespucci Canals</option>
+        <option>in Vinewood Hills</option>
+        <option>in West Vinewood</option>
+        <option>in the ghetto</option>
+        <option>near the beach</option>
+        <option>near the beach market</option>
+        <option>near Stadium</option>
+        <option>near Fire Station</option>
+        <option>near the train station</option>
+        <option>near the post office</option>
+        <option>in the city</option>
+      </select>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-4">
+      <label class="field-label" for="priceInput">Price / Budget</label>
+      <input type="text" id="priceInput" placeholder="$250k or $1.5m (bos = Negotiable, 500M usti = Negotiable)">
+    </div>
+
+    <div class="actions">
+      <button onclick="generateAd()">Submit</button>
+      <button onclick="copyAd()">Copy</button>
+    </div>
+
+    <div id="warningBox" class="warning-box"></div>
+    <div id="output" class="output-box">Ready to post ad will appear here...</div>
+    <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
+  </div>
+</div>
+
+<script type="module">
+  import { buildBusinessAd, PRIVATE_BUSINESSES, FAMILY_BUSINESSES, SHARES_ELIGIBLE, isFamilyBusiness } from './en3-rules/business-rules.js';
+
+  window.navigateTo = (page) => { window.location.href = page; };
+
+  // --- business dropdown doldur ---
+  const businessSelect = document.getElementById('businessSelect');
+  const privateGroup = businessSelect.querySelector('optgroup[label="Private Businesses"]');
+  const familyGroup = businessSelect.querySelector('optgroup[label="Family Businesses (takas edilemez)"]');
+  PRIVATE_BUSINESSES.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name;
+    privateGroup.appendChild(opt);
+  });
+  FAMILY_BUSINESSES.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name;
+    familyGroup.appendChild(opt);
+  });
+
+  // --- trade target dropdown doldur (ayni liste, "Private business" haric) ---
+  const tradeTargetSelect = document.getElementById('tradeTargetSelect');
+  [...PRIVATE_BUSINESSES, ...FAMILY_BUSINESSES].forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name; opt.textContent = name;
+    tradeTargetSelect.appendChild(opt);
+  });
+
+  // --- ad type secimi ---
+  let adType = '';
+  document.querySelectorAll('.ad-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+      btn.classList.add('active-btn');
+      adType = btn.dataset.type;
+      const lower = adType.toLowerCase();
+      document.getElementById('tradeTargetWrap').classList.toggle('hidden', !(lower === 'trading' || lower === 'selling or trading'));
+      refreshFamilyHint();
+    });
+  });
+
+  // --- business type degisince: plantation alani + family uyarisi + shares secenegi ---
+  function refreshFamilyHint() {
+    const name = businessSelect.value;
+    const hint = document.getElementById('familyHint');
+    const lower = adType.toLowerCase();
+    const isTrade = lower === 'trading' || lower === 'selling or trading';
+    hint.classList.toggle('hidden', !(isFamilyBusiness(name) && isTrade));
+  }
+
+  businessSelect.addEventListener('change', () => {
+    const name = businessSelect.value;
+    document.getElementById('plantationWrap').classList.toggle('hidden', name !== 'Plantation');
+    document.getElementById('sharesOption').disabled = !SHARES_ELIGIBLE.includes(name);
+    refreshFamilyHint();
+  });
+
+  function showWarning(msg) {
+    const box = document.getElementById('warningBox');
+    if (!msg) { box.style.display = 'none'; box.innerText = ''; return; }
+    box.innerText = msg;
+    box.style.display = 'block';
+  }
+
+  window.generateAd = function () {
+    showWarning('');
+    if (!adType) { showWarning('Lutfen ilan turunu secin.'); return; }
+    if (!businessSelect.value) { showWarning('Lutfen bir isletme secin.'); return; }
+
+    const state = {
+      adType,
+      businessName: businessSelect.value,
+      number: document.getElementById('businessNumber').value || null,
+      suffix: document.getElementById('suffixSelect').value || null,
+      plantationCrop: document.getElementById('plantationCrop').value || null,
+      plantationBeds: document.getElementById('plantationBeds').value || null,
+      tradeTarget: document.getElementById('tradeTargetSelect').value || null,
+      location: document.getElementById('locationInput').value || null,
+      priceRaw: document.getElementById('priceInput').value.trim(),
+    };
+
+    const { text, error } = buildBusinessAd(state);
+    if (error) { showWarning(error); return; }
+    document.getElementById('output').innerText = text;
+  };
+
+  function resetForm() {
+    adType = '';
+    document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+    document.getElementById('tradeTargetWrap').classList.add('hidden');
+    businessSelect.value = '';
+    document.getElementById('plantationWrap').classList.add('hidden');
+    document.getElementById('plantationCrop').value = '';
+    document.getElementById('plantationBeds').value = '';
+    document.getElementById('businessNumber').value = '';
+    document.getElementById('suffixSelect').value = '';
+    document.getElementById('tradeTargetSelect').value = '';
+    document.getElementById('locationInput').value = '';
+    document.getElementById('priceInput').value = '';
+    document.getElementById('familyHint').classList.add('hidden');
+    showWarning('');
+  }
+
+  window.copyAd = function () {
+    const output = document.getElementById('output');
+    const msg = document.getElementById('successMsg');
+    if (!output.innerText || output.innerText === 'Ready to post ad will appear here...') return;
+    navigator.clipboard.writeText(output.innerText).then(() => {
+      output.innerText = 'Ready to post ad will appear here...';
+      msg.style.display = 'block';
+      setTimeout(() => (msg.style.display = 'none'), 3000);
+      resetForm();
+    });
+  };
+</script>
+</body>
+</html>
