@@ -198,19 +198,47 @@
     </div>
 
     <!-- Location -->
-    <div class="grid grid-cols-2 gap-4 mb-4">
-      <div>
-        <label class="field-label" for="locationPrep">Preposition</label>
-        <select id="locationPrep">
-          <option value="in">in</option>
-          <option value="near">near</option>
-        </select>
-      </div>
-      <div>
-        <label class="field-label" for="locationInput">Location</label>
-        <input type="text" id="locationInput" list="locationOptions" placeholder="e.g. Vinewood Hills / the city">
-        <datalist id="locationOptions"></datalist>
-      </div>
+    <div class="mb-4">
+      <label class="field-label" for="locationInput">Location</label>
+      <select id="locationInput">
+        <option value="">Select</option>
+        <option>in the Casino</option>
+        <option>in Cayo Perico Island</option>
+        <option>near Church</option>
+        <option>in Del Perro</option>
+        <option>in Downtown Vinewood</option>
+        <option>in Eclipse Tower</option>
+        <option>in El Burro Heights</option>
+        <option>near Fight Club</option>
+        <option>near Hospital</option>
+        <option>near Sandy Hospital</option>
+        <option>in Little Seoul</option>
+        <option>near Lifeinvader</option>
+        <option>in Mirror Park</option>
+        <option>in the residential complex</option>
+        <option>in Richards Majestic</option>
+        <option>in Richman</option>
+        <option>in Rockford Hills</option>
+        <option>in Pacific Bluffs Country Club</option>
+        <option>in Paleto Bay</option>
+        <option>near Pillbox Hill</option>
+        <option>near Postal</option>
+        <option>in Rancho</option>
+        <option>in Sandy Shores</option>
+        <option>near Sandy Shores</option>
+        <option>near Stock Exchange</option>
+        <option>in Vespucci Canals</option>
+        <option>in Vinewood Hills</option>
+        <option>in West Vinewood</option>
+        <option>in the ghetto</option>
+        <option>near the beach</option>
+        <option>near the beach market</option>
+        <option>near Stadium</option>
+        <option>near Fire Station</option>
+        <option>near the train station</option>
+        <option>near the post office</option>
+        <option>in the city</option>
+      </select>
     </div>
 
     <!-- Rental period (sadece Renting out / Looking to rent icin) -->
@@ -247,17 +275,9 @@
 </div>
 
 <script type="module">
-  import { buildRealEstateAd, OFFICIAL_LOCATIONS, UNOFFICIAL_LOCATIONS } from './en3-rules/real-estate-rules.js';
+  import { buildRealEstateAd } from './en3-rules/real-estate-rules.js';
 
   window.navigateTo = (page) => { window.location.href = page; };
-
-  // --- locations datalist doldur ---
-  const locList = document.getElementById('locationOptions');
-  [...OFFICIAL_LOCATIONS, ...UNOFFICIAL_LOCATIONS].forEach(name => {
-    const opt = document.createElement('option');
-    opt.value = name;
-    locList.appendChild(opt);
-  });
 
   // --- ad type secimi ---
   let adType = '';
@@ -353,8 +373,7 @@
       drivewaySize: document.getElementById('drivewaySize').value,
       backyard: document.getElementById('backyard').checked,
       view: document.getElementById('viewSelect').value || null,
-      location: document.getElementById('locationInput').value.trim() || null,
-      locationPreposition: document.getElementById('locationPrep').value,
+      location: document.getElementById('locationInput').value || null,
       priceRaw: document.getElementById('priceInput').value.trim(),
       rentalPeriod: {
         periodType: document.getElementById('periodType').value || null,
@@ -398,7 +417,6 @@
     document.getElementById('viewSelect').value = '';
 
     // lokasyon
-    document.getElementById('locationPrep').value = 'in';
     document.getElementById('locationInput').value = '';
 
     // kiralama
