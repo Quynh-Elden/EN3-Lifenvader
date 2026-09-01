@@ -298,6 +298,41 @@
     document.getElementById('output').innerText = text;
   };
 
+  function resetForm() {
+    adType = '';
+    document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+    document.getElementById('rentalPeriodWrap').classList.add('hidden');
+    document.getElementById('tradeTargetWrap').classList.add('hidden');
+    document.getElementById('quantityWrap').classList.add('hidden');
+
+    isTruckSkin.checked = false;
+    document.getElementById('truckPercentWrap').classList.add('hidden');
+    document.getElementById('truckPercent').value = '';
+    document.getElementById('vehicleWrap').classList.remove('hidden');
+
+    vehicleInput.value = '';
+    document.getElementById('notSellableTag').style.display = 'none';
+    document.getElementById('tradeTargetInput').value = '';
+    document.getElementById('vehicleQuantity').value = '1';
+
+    document.querySelector('input[name="config"][value=""]').checked = true;
+    document.getElementById('visualUpgrades').checked = false;
+    document.getElementById('luminousWheels').checked = false;
+    document.getElementById('luminousWheelsType').value = '';
+    document.getElementById('luminousWheelsType').disabled = true;
+    document.getElementById('insurance').checked = false;
+    document.getElementById('turboKit').checked = false;
+    document.getElementById('driftKit').checked = false;
+    document.getElementById('autoFair').checked = false;
+
+    document.getElementById('periodType').value = '';
+    document.getElementById('periodDays').value = '';
+    document.getElementById('periodDaysWrap').classList.add('hidden');
+
+    document.getElementById('priceInput').value = '';
+    showWarning('');
+  }
+
   window.copyAd = function () {
     const output = document.getElementById('output');
     const msg = document.getElementById('successMsg');
@@ -306,6 +341,7 @@
       output.innerText = 'Ready to post ad will appear here...';
       msg.style.display = 'block';
       setTimeout(() => (msg.style.display = 'none'), 3000);
+      resetForm();
     });
   };
 </script>
