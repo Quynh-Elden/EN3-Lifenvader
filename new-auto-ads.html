@@ -1,1095 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Auto Ads</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    input, select {
-      color-scheme: dark;
-    }
-    .top-nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      background-color: #1c1c1c;
-      padding: 10px 20px;
-      gap: 10px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-    }
-    .top-nav button {
-      background-color: #111;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 16px;
-      font-size: 15px;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .top-nav button:hover {
-      background-color: #333;
-    }
-    .ad-type-btn {
-    background-color: #111;
-    color: white;
-    font-weight: bold;
-    border: 2px solid #333;
-    border-radius: 14px;
-    padding: 10px 20px;
-    font-size: 16px;
-    transition: all 0.3s ease;
+<meta charset="UTF-8" />
+<title>Auto Ads</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  input, select, textarea { color-scheme: dark; }
+  body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-size: 400% 400%;
+    animation: waveBG 20s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; min-height: 100vh; color: white; padding-top: 90px;
+  }
+  @keyframes waveBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .top-nav {
+    display: flex; justify-content: center; flex-wrap: nowrap; overflow-x: auto;
+    background-color: #1c1c1c; padding: 10px 20px; gap: 10px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+  .top-nav button {
+    background-color: #111; color: white; font-weight: bold; border: none;
+    border-radius: 10px; padding: 10px 16px; font-size: 15px; white-space: nowrap;
+    cursor: pointer; transition: background-color 0.3s ease;
+  }
+  .top-nav button:hover { background-color: #333; }
+
+  .ad-type-btn {
+    background: transparent; color: white; font-weight: bold;
+    border: 2px solid #555; border-radius: 14px; padding: 10px 16px;
+    font-size: 14px; cursor: pointer; transition: all 0.2s ease;
+  }
+  .ad-type-btn:hover { border-color: #888; }
+  .ad-type-btn.active-btn { border-color: #4da8ff; box-shadow: 0 0 8px rgba(77,168,255,0.5); }
+
+  .check-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+  .check-label input[type="checkbox"], .check-label input[type="radio"] { width: 16px; height: 16px; accent-color: #4da8ff; }
+
+  .field-label { font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block; }
+
+  input[type="text"], input[type="number"], select {
+    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444;
+    background-color: #1c1c1c; color: white; font-size: 15px; box-sizing: border-box;
+  }
+  select:disabled, input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .card {
+    background: #121212; padding: 40px; border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 100%; max-width: 760px;
+    box-sizing: border-box;
   }
 
-  .ad-type-btn:hover {
-    background-color: #222;
-    border-color: #555;
+  .hint { font-size: 12px; color: #888; margin-top: 4px; }
+  .warning-box {
+    background: #3a1f1f; border: 1px solid #8b3a3a; color: #ffb4b4;
+    padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-top: 14px; display: none;
   }
-    .ad-type-btn.active-btn {
-      border: 2px solid #facc15 !important;
-      background-color: #111 !important;
-    }
-  </style>
-  <script>
-    function navigateTo(page) {
-      window.location.href = page;
-    }
-  </script>
+  .not-sellable-tag {
+    background: #5a3a1f; border: 1px solid #8b6a3a; color: #ffd9b4;
+    padding: 6px 10px; border-radius: 8px; font-size: 12px; margin-top: 6px; display: none;
+  }
+  .output-box {
+    margin-top: 20px; background-color: #1c1c1c; padding: 16px; border-radius: 12px;
+    min-height: 50px; white-space: pre-line; font-size: 15px;
+  }
+  .success-msg {
+    margin-top: 12px; text-align: center; color: #d4ffd4; background-color: #1f6624;
+    padding: 10px; border-radius: 10px; font-size: 14px; display: none;
+  }
+  .actions { display: flex; justify-content: center; gap: 40px; margin-top: 24px; }
+  .actions button {
+    background: transparent; border: none; color: white; font-weight: bold;
+    font-size: 16px; cursor: pointer; padding: 8px 16px; border-radius: 8px;
+  }
+  .actions button:hover { background: #1c1c1c; }
+</style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-indigo-900 to-black min-h-screen text-white font-sans pt-[90px]">
-  <!-- ✅ Navbar -->
-  <div class="top-nav">
-    <button onclick="navigateTo('auto-ads.html')">Auto</button>
-    <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
-    <button onclick="navigateTo('business-ads.html')">Business</button>
-    <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
-    <button onclick="navigateTo('work-ads.html')">Work</button>
-    <button onclick="navigateTo('dating-ads.html')">Dating</button>
-    <button onclick="navigateTo('other-ads.html')">Other</button>
-    <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
-    <button onclick="navigateTo('reject-reasons-ads.html')">Reject Reasons</button>
-  </div>
+<body>
 
-  <!-- ✨ Full Card Content Restored With New Style -->
-  <div class="max-w-3xl mx-auto mt-10 bg-[#111] p-6 rounded-2xl shadow-xl">
+<div class="top-nav">
+  <button onclick="navigateTo('new-auto-ads.html')">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')">Work</button>
+  <button onclick="navigateTo('dating-ads.html')">Dating</button>
+  <button onclick="navigateTo('other-ads.html')">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+</div>
+
+<div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
+  <div class="card">
     <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Auto Ads</h1>
 
-    <!-- Transaction Buttons -->
-<div class="flex justify-center gap-4 mt-4">
-  <button class="ad-type-btn active-btn" data-type="Buying">Buying</button>
-  <button class="ad-type-btn" data-type="Selling">Selling</button>
-  <button class="ad-type-btn" data-type="Selling or Trading">Selling or Trading</button>
-  <button class="ad-type-btn" data-type="Trading">Trading</button>
-</div>
-    <!-- Car Name -->
-    <label for="carName" class="block font-semibold mb-1">Select Car</label>
-    <input list="carOptions" id="carName" placeholder="e.g. search a car" class="w-full p-2 rounded-lg bg-gray-900 border border-gray-700 placeholder-gray-400 mb-4" />
+    <!-- Ad type -->
+    <div class="flex justify-center gap-2 flex-wrap mb-6">
+      <button class="ad-type-btn" data-type="Buying">Buying</button>
+      <button class="ad-type-btn" data-type="Selling">Selling</button>
+      <button class="ad-type-btn" data-type="Trading">Trading</button>
+      <button class="ad-type-btn" data-type="Selling or Trading">Selling or Trading</button>
+      <button class="ad-type-btn" data-type="Renting out">Renting out</button>
+      <button class="ad-type-btn" data-type="Renting">Looking to rent</button>
+    </div>
 
-    <!-- Trading Option -->
+    <!-- Exclusive truck skin toggle -->
     <div class="mb-4">
-      <label class="flex items-center gap-2 font-semibold">
-        <input type="checkbox" id="trading" class="w-5 h-5">
-        Trading
-      </label>
-
-      <div id="secondCarInput" class="hidden mt-2 w-1/2">
-        <label for="secondCar" class="text-sm font-semibold">Trade For (Optional):</label>
-        <input list="carOptions" id="secondCar" placeholder="e.g. another car" class="w-full p-2 text-sm rounded-md bg-gray-900 border border-gray-700 placeholder-gray-500" />
+      <label class="check-label"><input type="checkbox" id="isTruckSkin"> Exclusive truck skin rental (% kaplama)</label>
+      <div id="truckPercentWrap" class="hidden mt-2">
+        <label class="field-label" for="truckPercent">Percent</label>
+        <input type="number" id="truckPercent" placeholder="e.g. 20">
       </div>
     </div>
-    <!-- DATAlist goes here (very long, to be inserted separately) -->
-        <datalist id="carOptions"> 
-        <option value="Adder">
-        <option value="Albany Escalade">
-        <option value="Itali GTB">  
-        <option value="Alpha">
-        <option value="Annis 350Z">
-        <option value="Annis GT-R I">
-        <option value="Annis RX-7 (FD)">
-        <option value="Annis RX-8">
-        <option value="Annis Silvia (S15)">
-        <option value="Annis Skyline GT-R (R34)">
-        <option value="Annis WRX 2004">
-        <option value="Annis ZR-350">
-        <option value="Apocalypse Impaler">
-        <option value="Apocalypse Imperator">
-        <option value="Apocalypse Issi">
-        <option value="Apocalypse Slamvan">
-        <option value="Ardent">
-        <option value="Asbo">
-        <option value="Asea">
-        <option value="Asterope">
-        <option value="Autarch">
-        <option value="Annis RX-7 (VF)">
-        <option value="Baller">
-        <option value="Baller LE LWB">
-        <option value="Baller SG">
-        <option value="Banshee">
-        <option value="Banshee 900R">
-        <option value="Beater Emperor">
-        <option value="Beater Mariachi Tornado">
-        <option value="Beater Surfer">
-        <option value="Beater Tornado">
-        <option value="Benefactor 600SEL (W140)">
-        <option value="Benefactor C63 Coupe (W205)">
-        <option value="Benefactor E420 (W210)">
-        <option value="Benefactor G63 (G770)">
-        <option value="Benefactor GT Black Series">
-        <option value="Benefactor GT-63 (S)">
-        <option value="Benefactor S63 (W222)">
-        <option value="Benefactor Vito (V447)">
-        <option value="Benefactor-AMG C63 (W205)">
-        <option value="Benefactor-AMG GT">
-        <option value="Benefactor-AMG GT 63 (S)">
-        <option value="Benefactor-AMG SL65 (R230)">
-        <option value="Benefactor-Maybach Pullman">
-        <option value="Benefactor-MG VT">
-        <option value="Bestia GTS">
-        <option value="Bison">
-        <option value="a car">
-        <option value="a motorbike">
-        <option value="a boat">
-        <option value="a plane">
-        <option value="a helicopter">
-        <option value="an electric car">
-        <option value="Blista">
-        <option value="Blista Kanjo">
-        <option value="Bodhi">
-        <option value="Bravado Charger 1969">
-        <option value="Bravado Charger SRT">
-        <option value="Bravado Ram 1500">
-        <option value="Bravado Viper 2008">
-        <option value="Brawler">
-        <option value="Brioso R/A">
-        <option value="Buccaneer">
-        <option value="Buffalo">
-        <option value="Bullet">
-        <option value="Burgerfahrzeug Golf GTI Vision">
-        <option value="Burgerfahrzeug Tiguan">
-        <option value="Calico GTF">
-        <option value="Caracara 4x4">
-        <option value="Carbonizzare">
-        <option value="Casco">
-        <option value="Cavalcade">
-        <option value="Cheburek">
-        <option value="Cheetah">
-        <option value="Cheetah Classic">
-        <option value="Chino">
-        <option value="Clique">
-        <option value="Cognoscenti">
-        <option value="Cognoscenti 55">
-        <option value="Cognoscenti Cabrio">
-        <option value="Coil Cybertruck">
-        <option value="Coil H9">
-        <option value="Coil Model S">
-        <option value="Coil Model X">
-        <option value="Coil Roadster">
-        <option value="Elegy RH8">
-        <option value="Ellie">
-        <option value="Emperor">
-        <option value="Emperor LX-570">
-        <option value="Emperor RCF">
-        <option value="Entity XF">
-        <option value="Enus Bentayga">
-        <option value="Enus Continental GT">
-        <option value="Enus Cullinan">
-        <option value="Enus Phantom">
-        <option value="ETR-1">
-        <option value="Euros">
-        <option value="Exemplar">
-        <option value="Enus Spectre">
-        <option value="F620">
-        <option value="Faction">
-        <option value="Felon">
-        <option value="Felon GT">
-        <option value="Feltzer">
-        <option value="Flash GT">
-        <option value="FMJ">
-        <option value="FQ 2">
-        <option value="Fugitive">
-        <option value="Furore GT">
-        <option value="Fusilade">
-        <option value="Futo">
-        <option value="Futo GTX">
-        <option value="Future Shock Issi">
-        <option value="Gallivanter Defender">
-        <option value="Gallivanter Velar">
-        <option value="Gauntlet">
-        <option value="Gauntlet Classic">
-        <option value="Gauntlet Hellfire">
-        <option value="Gauntlet Redwood">
-        <option value="GB200">
-        <option value="Glendale">
-        <option value="GP-1">
-        <option value="Granger">
-        <option value="Grotti Italia (F458)">
-        <option value="Grotti Purosangue">
-        <option value="Growler">
-        <option value="GT 500">
-        <option value="Hermes">
-        <option value="Huntley S">
-        <option value="Imorgon">
-        <option value="Kuruma">
-        <option value="Avarus">
-        <option value="Bagger">
-        <option value="Bati 801">
-        <option value="Bati 801RR">
-        <option value="BF-400">
-        <option value="BMX">
-        <option value="Blazer">
-        <option value="Blazer Lifeguard">
-        <option value="Buzzard">
-        <option value="Carbon RS">
-        <option value="Chimera">
-        <option value="Cliffhanger">
-        <option value="Cruiser">
-        <option value="Cuban 800">
-        <option value="Daemon">
-        <option value="Defiler">
-        <option value="Diabolus">
-        <option value="Diabolus Custom">
-        <option value="Dinghy">
-        <option value="Dinghy (2-Seater)">
-        <option value="Dinghy (Yacht)">
-        <option value="Dodo">
-        <option value="Double-T">
-        <option value="Duster">
-        <option value="Hotknife">
-        <option value="Impaler">
-        <option value="Infernus">
-        <option value="Infernus Classic">
-        <option value="Ingot">
-        <option value="Issi">
-        <option value="Itali GTB">
-        <option value="Itali GTB Custom">
-        <option value="Itali GTO">
-        <option value="Jackal">
-        <option value="JB 700">
-        <option value="Jester">
-        <option value="Jester (Racecar)">
-        <option value="Jester Classic">
-        <option value="Jester RR">
-        <option value="Journey">
-        <option value="Jugular">
-        <option value="Kamacho">
-        <option value="Karin Land Cruiser 200">
-        <option value="Karin Mark 2">
-        <option value="Karin Rav4 2021">
-        <option value="Karin Supra A80">
-        <option value="Karin Tundra 2021">
-        <option value="Khamelion">
-        <option value="Komoda">
-        <option value="Krieger">
-         <option value="Enduro">
-         <option value="Esskey">
-         <option value="Faggio">
-         <option value="FCR 1000">
-         <option value="FCR 1000 Custom">
-         <option value="Future Shock Deathbike">
-         <option value="Frogger">
-         <option value="Gargoyle">
-         <option value="Hakuchou">
-         <option value="Hakuchou Drag">
-         <option value="a helicopter">
-         <option value="Hexer">
-         <option value="Howard NX-25">
-         <option value="Innovation">
-         <option value="Comet S2">
-         <option value="Comet SR">
-         <option value="Contender">
-         <option value="Coquette">
-         <option value="Coquette Blackfin">
-         <option value="Coquette Classic">
-         <option value="Coquette D10">
-         <option value="Cyclone">
-         <option value="Cypher">
-         <option value="Declasse Camaro 2020">
-         <option value="Declasse Corvette C7">
-         <option value="Declasse Tahoe">
-         <option value="Deveste Eight">
-         <option value="Deviant">
-         <option value="Dilettante">
-         <option value="Dinka NSX 2017">
-         <option value="Dinka RT-3000">
-         <option value="Dominator">
-         <option value="Dominator ASP">
-         <option value="Dominator GTT">
-         <option value="Dominator GTX">
-         <option value="Dominator PiBwasser">
-         <option value="Drift Yosemite">
-         <option value="Dubsta">
-         <option value="Dubsta 6x6">
-         <option value="Dubsta SG">
-         <option value="Dukes">
-         <option value="Elegy Retro Custom">
-         <option value="Lampadati Guilia GTA">
-         <option value="Landstalker">
-         <option value="Lynx">
-         <option value="Mamba">
-         <option value="Mammoth Hum EV">
-         <option value="Massacro">
-         <option value="Monroe">
-         <option value="Moonbeam">
-         <option value="Nebula Turbo">
-         <option value="Neon">
-         <option value="Nero">
-         <option value="Nero Custom">
-         <option value="Nightshade">
-         <option value="Novak">
-         <option value="Obey A6">
-         <option value="Obey A8">
-         <option value="Obey Q60">
-         <option value="Obey Q8">
-         <option value="Obey R8">
-         <option value="Obey RS6">
-         <option value="Obey RS7">
-         <option value="Obey S8 (D4)">
-         <option value="Ocelot DBS GT Zagato">
-         <option value="Ocelot Eletre">
-         <option value="Ocelot F-Type R">
-         <option value="Ocelot V12 Speedster">
-         <option value="Ocelot Vanquish Zagato SB">
-         <option value="Ocelot Victor">
-         <option value="Ocelot XE SV Project 8">
-         <option value="Octavia RS">
-         <option value="Oracle">
-         <option value="Osiris">
-         <option value="Panto">
-         <option value="Paragon R">
-         <option value="Pariah">
-         <option value="Patriot">
-         <option value="Patriot Stretch">
-         <option value="Pegassi Huayra BC">
-         <option value="Pegassi Performante (LP640)">
-         <option value="Penetrator">
-         <option value="Penumbra">
-         <option value="Pfister 811">
-         <option value="Pfister 911">
-         <option value="Pfister 918 Spyder">
-         <option value="Pfister Panamera">
-         <option value="Pfister Taycan">
-         <option value="Pheonix">
-         <option value="Picador">
-         <option value="Prairie">
-         <option value="Premier">
-         <option value="Previon">
-         <option value="Progen P1">
-         <option value="Raiden">
-         <option value="Rancher XL">
-         <option value="Rapid GT">
-         <option value="Raptor">
-         <option value="Rat-Loader">
-         <option value="Rat-Truck">
-         <option value="RE-7B">
-         <option value="Reaper">
-         <option value="Rebel">
-         <option value="Rebla GTS">
-         <option value="Regina">
-         <option value="Remus">
-         <option value="Revolter">
-         <option value="Rhapsody">
-         <option value="Riata">
-         <option value="Rocoto">
-         <option value="Ruiner">
-         <option value="Rumpo">
-         <option value="Ruston">
-         <option value="Rusty Rebel">
-         <option value="Sabre Turbo">
-         <option value="Sandking SWB">
-         <option value="Sandking XL">
-         <option value="SC-1">
-         <option value="Schafter">
-         <option value="Schafter LWB">
-         <option value="Schafter LWB (Armored)">
-         <option value="Schafter V12">
-         <option value="Schlagen GT">
-         <option value="Schwarzer">
-         <option value="Seminole">
-         <option value="Sentinel Classic">
-         <option value="Sentinel XS">
-         <option value="Serrano">
-         <option value="Seven-70">
-         <option value="Shelby GT500">
-         <option value="Slamvan">
-         <option value="Slamvan Custom">
-         <option value="Specter">
-         <option value="Stafford">
-         <option value="StafVapid">
-         <option value="Stalion">
-         <option value="Stinger">
-         <option value="Stinger GT">
-         <option value="Stirling GT">
-         <option value="Streiter">
-         <option value="Stretch">
-         <option value="Sultan">
-         <option value="Sultan Classic">
-         <option value="Sultan RS">
-         <option value="Sultan RS Classic">
-         <option value="Super Diamond">
-         <option value="Surano">
-         <option value="Surge">
-         <option value="Swinger">
-         <option value="SuperVolito Carbon">
-         <option value="Sparrow">  
-         <option value="T-20">
-         <option value="Tailgater">
-         <option value="Tailgater S">
-         <option value="Taipan">
-         <option value="Tampa">
-         <option value="Tempesta">
-         <option value="Tezeract">
-         <option value="Thrax">
-         <option value="Tigon">
-         <option value="Torero">
-         <option value="Toros">
-         <option value="Tropos Rallye">
-         <option value="Truffade Chiron">
-         <option value="Tulip">
-         <option value="Turismo Classic">
-         <option value="Turismo R">
-         <option value="Tyrant">
-         <option value="Tyrus">
-         <option value="Ubermacht 760 (LI)">
-         <option value="Ubermacht I8">
-         <option value="Ubermacht M3 (E46)">
-         <option value="Ubermacht M3 (G80)">
-         <option value="Ubermacht M3 CS">
-         <option value="Ubermacht M4 (G82)">
-         <option value="Ubermacht M4 (GTS)">
-         <option value="Ubermacht M5 (CS)">
-         <option value="Ubermacht M5 (E34)">
-         <option value="Ubermacht M5 (E60)">
-         <option value="Ubermacht M5 (F90)">
-         <option value="Ubermacht M8 (F91)">
-         <option value="Ubermacht X5 (E70)">
-         <option value="Ubermacht X5 (G05)">
-         <option value="Ubermacht X5-M (F95)">
-         <option value="Ubermacht X6-M (E71)">
-         <option value="Ubermacht X6-M 2021">
-         <option value="Ubermacht X7 (G07)">
-         <option value="V-STR">
-         <option value="Vacca">
-         <option value="Vagner">
-         <option value="Vamos">
-         <option value="Vapid Mustang GT500">
-         <option value="Vapid Raptor (F150)">
-         <option value="Vectre">
-         <option value="Velierer">
-         <option value="Vigero">
-         <option value="Virgo">
-         <option value="Virgo Classic">
-         <option value="Visione">
-         <option value="Volatus">
-         <option value="Voltic">
-         <option value="Voodoo">
-         <option value="Voodoo Custom">
-         <option value="Warrener">
-         <option value="Warrener HKR">
-         <option value="Washington">
-         <option value="Windsor">
-         <option value="Windsor Drop">
-         <option value="X80 Proto">
-         <option value="XA-21">
-         <option value="XLS">
-         <option value="XLS (Armored)">
-         <option value="Yosemite">
-         <option value="Yosemite Rancher">
-         <option value="Z-Type">
-         <option value="Zentorno">
-         <option value="Zion">
-         <option value="Zion Cabrio">
-         <option value="Zion Classic">
-         <option value="Zorrusso">
-         <option value="9F">
-         <option value="9F Cabrio">
-         <option value="Swift Deluxe">
-         <option value="Nimbus">
-         <option value="V-65 Molotok">
-    </datalist>
 
+    <!-- Vehicle search -->
+    <div id="vehicleWrap" class="mb-2">
+      <label class="field-label" for="vehicleInput">Vehicle (bos birakilirsa "a car" / "a vehicle" yazilir)</label>
+      <input type="text" id="vehicleInput" list="vehicleOptions" placeholder="Type to search vehicle list...">
+      <datalist id="vehicleOptions"></datalist>
+      <div id="notSellableTag" class="not-sellable-tag">⚠ Bu arac "NOT SELLABLE" — sadece kiralanabilir/kiraya verilebilir.</div>
+    </div>
 
-    <!-- Configuration & Extras -->
-    <div class="mt-6 flex flex-col items-center space-y-6">
-      <!-- Configuration -->
-      <div class="flex flex-col items-center space-y-2">
-        <p class="font-semibold text-lg text-center">Configuration Type:</p>
-        <div class="flex gap-8">
-          <label class="text-lg flex items-center gap-2">
-            <input type="checkbox" value="Full" class="w-6 h-6"> Full
-          </label>
-          <label class="text-lg flex items-center gap-2">
-            <input type="checkbox" value="Partial" class="w-6 h-6"> Partial
-          </label>
-        </div>
+    <!-- Quantity (sadece arac secilmemis + Renting) -->
+    <div id="quantityWrap" class="mb-4 hidden">
+      <label class="field-label" for="vehicleQuantity">Quantity</label>
+      <select id="vehicleQuantity">
+        <option value="1">1 (a vehicle)</option>
+        <option value="2">2+ (vehicles)</option>
+      </select>
+    </div>
+
+    <!-- Trade target (sadece Trading / Selling or Trading) -->
+    <div id="tradeTargetWrap" class="mb-4 hidden">
+      <label class="field-label" for="tradeTargetInput">Takas edilecek arac (for X)</label>
+      <input type="text" id="tradeTargetInput" list="vehicleOptions" placeholder="Type to search vehicle list...">
+    </div>
+
+    <!-- Configuration -->
+    <div class="mb-4">
+      <span class="field-label">Configuration</span>
+      <div class="flex gap-4 flex-wrap">
+        <label class="check-label"><input type="radio" name="config" value="" checked> None</label>
+        <label class="check-label"><input type="radio" name="config" value="partial"> Partial</label>
+        <label class="check-label"><input type="radio" name="config" value="full"> Full</label>
       </div>
+    </div>
 
-      <!-- Extras -->
-      <div class="flex flex-col items-center space-y-2">
-        <p class="font-semibold text-lg text-center">Extras:</p>
-        <div class="flex flex-wrap justify-center gap-x-6 gap-y-4 text-base">
-          <label class="flex items-center gap-2">
-            <input type="checkbox" value="Visual Upgrades" class="w-6 h-6"> Visual Upgrades
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="checkbox" value="Insurance" class="w-6 h-6"> Insurance
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="checkbox" value="Tuning Parts" class="w-6 h-6"> Tuning Parts
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="checkbox" value="Turbo Kit" class="w-6 h-6"> Turbo Kit
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="checkbox" value="Drift Kit" class="w-6 h-6"> Drift Kit
-          </label>
-        </div>
+    <!-- Feature checkboxes -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+      <label class="check-label"><input type="checkbox" id="visualUpgrades"> Visual upgrades</label>
+      <label class="check-label"><input type="checkbox" id="insurance"> Insurance</label>
+      <label class="check-label"><input type="checkbox" id="turboKit"> Turbo kit</label>
+      <label class="check-label"><input type="checkbox" id="driftKit"> Drift kit</label>
+      <label class="check-label"><input type="checkbox" id="luminousWheels"> Luminous wheels</label>
+      <input type="number" id="luminousWheelsType" placeholder="type #" class="disabled" disabled>
+    </div>
+
+    <!-- Auto Fair -->
+    <div class="mb-4">
+      <label class="check-label"><input type="checkbox" id="autoFair"> At Auto Fair (fiyat yazilmaz, "Negotiable" da yazilmaz)</label>
+    </div>
+
+    <!-- Rental period -->
+    <div id="rentalPeriodWrap" class="grid grid-cols-2 gap-4 mb-4 hidden">
+      <div>
+        <label class="field-label" for="periodType">Rental Period</label>
+        <select id="periodType">
+          <option value="">-- Select --</option>
+          <option value="per week">per week</option>
+          <option value="per day">for X day(s) (max 21)</option>
+        </select>
+      </div>
+      <div id="periodDaysWrap" class="hidden">
+        <label class="field-label" for="periodDays">Days (1-21)</label>
+        <input type="number" id="periodDays" min="1" max="21" placeholder="e.g. 3">
       </div>
     </div>
 
     <!-- Price -->
-    <input type="text" id="price" placeholder="e.g. $5m or 250k" class="w-full mt-6 p-2 rounded-lg text-white placeholder-white bg-gray-900 border border-gray-700" />
-
-    <!-- Buttons -->
-    <div class="grid grid-cols-2 gap-4 mt-6 w-full">
-      <button onclick="generateAd()" class="w-full py-3 text-lg bg-[#111111] text-white border border-gray-600 rounded-xl font-semibold shadow-md hover:bg-[#222222] transition">Generate</button>
-      <button onclick="copyAd()" class="w-full py-3 text-lg bg-[#111111] text-white border border-gray-600 rounded-xl font-semibold shadow-md hover:bg-[#222222] transition">Copy</button>
+    <div id="priceWrap" class="mb-4">
+      <label class="field-label" for="priceInput">Price / Budget / Rent</label>
+      <input type="text" id="priceInput" placeholder="$250k or $1.5m (bos = Negotiable)">
     </div>
 
-    <!-- Output -->
-    <div id="output" class="bg-black p-4 rounded-lg border border-gray-700 min-h-[60px] mt-4 text-white text-center text-base">
-      Ready to post ad will appear here...
+    <div class="actions">
+      <button onclick="generateAd()">Submit</button>
+      <button onclick="copyAd()">Copy</button>
     </div>
-    <div id="copyMsg" class="text-green-400 text-center mt-2 hidden">✅ Copied successfully!</div>
+
+    <div id="warningBox" class="warning-box"></div>
+    <div id="output" class="output-box">Ready to post ad will appear here...</div>
+    <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
   </div>
-  <script>
-   const stateValues = {
-      "Adder": 2600000,
-      "Itali GTB": 2200000,
-      "Albany Escalade": 3500000,
-      "Alpha": 880000,
-      "Annis 350Z": 2750000,
-      "Annis GT-R I": 3800000,
-      "Annis RX-7 (FD)": 450000,
-      "Annis RX-8": 1300000,
-      "Annis Silvia (S15)": 900000,
-      "Annis Skyline GT-R (R34)": 2500000,
-      "Annis WRX 2004": 1300000,
-      "Annis ZR-350": 900000,
-      "Apocalypse Impaler": 490000,
-      "Apocalypse Imperator": 500000,
-      "Apocalypse Issi": 10000,
-      "Apocalypse Slamvan": 20000,
-      "Ardent": 2000000,
-      "Asbo": 85000,
-      "Asea": 62000,
-      "Asterope": 190000,
-      "Autarch": 3200000,
-      "Annis RX-7 (VF)": 2000000,
-      "a car": null,
-      "a motorbike": null,
-      "a boat": null,
-      "a plane": null,
-      "a motorcycle": null,
-      "a helicopter": null,
-      "an electric car": null,
-      "Baller": 1050000,
-      "Baller LE LWB": 3595000,
-      "Baller SG": 1800000,
-      "Banshee": 2300000,
-      "Banshee 900R": null,
-      "Beater Emperor": 18000,
-      "Beater Mariachi Tornado": 17200,
-      "Beater Surfer": 40000,
-      "Beater Tornado": 15000,
-      "Benefactor 600SEL (W140)": 90000,
-      "Benefactor C63 Coupe (W205)": 1700000,
-      "Benefactor E420 (W210)": 120000,
-      "Benefactor G63 (G770)": 5000000,
-      "Benefactor GT Black Series": 6000000,
-      "Benefactor GT-63 (S)": null,
-      "Benefactor S63 (W222)": 4000000,
-      "Benefactor Vito (V447)": 4000000,
-      "Benefactor-AMG C63 (W205)": 1500000,
-      "Benefactor-AMG GT": 5000000,
-      "Benefactor-AMG GT 63 (S)": 4200000,
-      "Benefactor-AMG SL65 (R230)": 3500000,
-      "Benefactor-Maybach Pullman": 5000000,
-      "Benefactor-MG VT": 6000000,
-      "Bestia GTS": 1000000,
-      "Bison": 275000,
-      "Blade": 76000,
-      "Blista": 99500,
-      "Blista Kanjo": 322000,
-      "Bodhi": 27000,
-      "Bravado Charger 1969": 400000,
-      "Bravado Charger SRT": 5000000,
-      "Bravado Ram 1500": 3500000,
-      "Bravado Viper 2008": 2000000,
-      "Brawler": 1100000,
-      "Brioso R/A": 47000,
-      "Buccaneer": 82000,
-      "Buffalo": 550000,
-      "Bullet": 2600000,
-      "Burgerfahrzeug Golf GTI Vision": 2800000,
-      "Burgerfahrzeug Tiguan": 10000000,
-      "Calico GTF": 1400000,
-      "Caracara 4x4": 2500000,
-      "Carbonizzare": 1500000,
-      "Casco": 975000,
-      "Cavalcade": 760000,
-      "Cheburek": 77000,
-      "Cheetah": 3300000,
-      "Cheetah Classic": 2400000,
-      "Chino": 74000,
-      "Clique": 250000,
-      "Cognoscenti": 3700000,
-      "Cognoscenti 55": 3400000,
-      "Cognoscenti Cabrio": 1400000,
-      "Coil Cybertruck": 4000000,
-      "Coil H9": 11000000,
-      "Coil Model S": 6000000,
-      "Coil Model X": null,
-      "Coil Roadster": 10000000,
-      "Elegy RH8": 1200000,
-      "Ellie": 400000,
-      "Emperor": 42000,
-      "Emperor LX-570": 3500000,
-      "Emperor RCF": 0,
-      "Entity XF": 3400000,
-      "Enus Bentayga": 4000000,
-      "Enus Continental GT": 6000000,
-      "Enus Cullinan": 7000000,
-      "Enus Phantom": 8000000,
-      "ETR-1": 3500000,
-      "Euros": 2900000,
-      "Exemplar": 950000,
-      "Enus Spectre": 33000000,
-      "F620": 1600000,
-      "Faction": 105000,
-      "Felon": 1100000,
-      "Felon GT": 1190000,
-      "Feltzer": 3250000,
-      "Flash GT": 800000,
-      "FMJ": 3200000,
-      "FQ 2": 995000,
-      "Fugitive": 125000,
-      "Furore GT": 2200000,
-      "Fusilade": 1100000,
-      "Futo": 120000,
-      "Futo GTX": 125000,
-      "Future Shock Issi": 10000,
-      "Gallivanter Defender": 2500000,
-      "Gallivanter Velar": 3500000,
-      "Gauntlet": 530000,
-      "Gauntlet Classic": 210000,
-      "Gauntlet Hellfire": 340000,
-      "Gauntlet Redwood": 550000,
-      "GB200": 950000,
-      "Glendale": 28000,
-      "GP-1": 3200000,
-      "Granger": 1200000,
-      "Grotti Italia (F458)": 4500000,
-      "Grotti Purosangue": 20000000,
-      "Growler": 3250000,
-      "GT 500": null,
-      "Hermes": 380000,
-      "Impaler": 430000,
-      "Infernus": 3500000,
-      "Infernus Classic": 1600000,
-      "Ingot": 40000,
-      "Issi": 49000,
-      "Itali GTB": 2200000,
-      "Avarus": 178000,
-      "Bagger": 130000,
-      "Bati 801": 276000,
-      "Bati 801RR": 285000,
-      "BF-400": 99000,
-      "BMX": 1010,
-      "Blazer": 240000,
-      "Blazer Lifeguard": 262000,
-      "Buzzard": 8500000,
-      "Carbon RS": 241000,
-      "Chimera": 129000,
-      "Cliffhanger": 147000,
-      "Cruiser": 1010,
-      "Cuban 800": 7000000,
-      "Daemon": 223000,
-      "Defiler": 162000,
-      "Diabolus": 200000,
-      "Diabolus Custom": 218000,
-      "Dinghy": 75000,
-      "Dinghy (2-Seater)": 70000,
-      "Dinghy (Yacht)": 140000,
-      "Dodo": 6500000,
-      "Double-T": 299000,
-      "Duster": 1000000,
-      "Hotknife": 635000,
-      "Huntley S": 2300000,
-      "Imorgon": 2500000,
-      "Issi": 49000,
-      "Itali GTB Custom": 2700000,
-      "Itali GTO": 3000000,
-      "Jackal": 1200000,
-      "JB 700": 1400000,
-      "Jester": 2800000,
-      "Jester (Racecar)": 2950000,
-      "Jester Classic": 499900,
-      "Jester RR": 3000000,
-      "Journey": 48000,
-      "Jugular": 2000000,
-      "Kamacho": 350000,
-      "Karin Land Cruiser 200": 3200000,
-      "Karin Mark 2": 500000,
-      "Karin Rav4 2021": 10000000,
-      "Karin Supra A80": 2500000,
-      "Karin Tundra 2021": 3000000,
-      "Khamelion": 2300000,
-      "Komoda": 3100000,
-      "Krieger": 5200000,
-      "Kuruma": null,
-      "Enduro": 39990,
-      "Esskey": 65000,
-      "Faggio": 5000,
-      "FCR 1000": 85500,
-      "FCR 1000 Custom": 86000,
-      "Future Shock Deathbike": null,
-      "Frogger": 9500000,
-      "Gargoyle": 95000,
-      "Hakuchou": 284000,
-      "Hakuchou Drag": 320000,
-      "Hexer": 200000,
-      "Howard NX-25": 6500000,
-      "Innovation": 185000,
-      "Comet": 1600000,
-      "Comet S2": 3100000,
-      "Comet SR": 2900000,
-      "Contender": 2700000,
-      "Coquette": 2200000,
-      "Coquette Blackfin": 600000,
-      "Coquette Classic": 1200000,
-      "Coquette D10": 3250000,
-      "Cyclone": 2100000,
-      "Cypher": 3200000,
-      "Declasse Camaro 2020": 4500000,
-      "Declasse Corvette C7": 4400000,
-      "Declasse Tahoe": 1500000,
-      "Deveste Eight": 3800000,
-      "Deviant": 650000,
-      "Dilettante": 121000,
-      "Dinka NSX 2017": 10000000,
-      "Dinka RT-3000": 1000000,
-      "Dominator": 70000,
-      "Dominator ASP": 1300000,
-      "Dominator GTT": 250000,
-      "Dominator GTX": 1450000,
-      "Dominator PiBwasser": 720000,
-      "Drift Yosemite": 420000,
-      "Dubsta": 4250000,
-      "Dubsta 6x6": 5200000,
-      "Dubsta SG": 4700000,
-      "Dukes": 90000,
-      "Elegy Retro Custom": 1000000,
-      "Lampadati Guilia GTA": 7500000,
-      "Landstalker": 80000,
-      "Lynx": 1650000,
-      "Mamba": 1350000,
-      "Mammoth Hum EV": 23000000,
-      "Massacro": 1800000,
-      "Monroe": 1700000,
-      "Moonbeam": 112000,
-      "Nebula Turbo": 75000,
-      "Neon": 3200000,
-      "Nero": 3000000,
-      "Nero Custom": 3400000,
-      "Nightshade": 650000,
-      "Novak": 1800000,
-      "Obey A6": 3300000,
-      "Obey A8": 750000,
-      "Obey Q60": null,
-      "Obey Q8": 5500000,
-      "Obey R8": 2800000,
-      "Obey RS6": 3200000,
-      "Obey RS7": 3200000,
-      "Obey S8 (D4)": 10000000,
-      "Ocelot DBS GT Zagato": 22000000,
-      "Ocelot Eletre": 15000000,
-      "Ocelot F-Type R": 7900000,
-      "Ocelot V12 Speedster": 20000000,
-      "Ocelot Vanquish Zagato SB": 10000000,
-      "Ocelot Victor": null,
-      "Ocelot XE SV Project 8": null,
-      "Octavia RS": 2500000,
-      "Oracle": null,
-      "Osiris": 2500000,
-      "Panto": 70000,
-      "Paragon R": 1600000,
-      "Pariah": 2300000,
-      "Patriot": 2950000,
-      "Patriot Stretch": 5999000,
-      "Pegassi Huayra BC": 9000000,
-      "Pegassi Performante (LP640)": 5000000,
-      "Penetrator": 2690000,
-      "Penumbra": 910000,
-      "Pfister 811": 2700000,
-      "Pfister 911": null,
-      "Pfister 918 Spyder": 15000000,
-      "Pfister Panamera": 2200000,
-      "Pfister Taycan": 10000000,
-      "Pheonix": null,
-      "Picador": 96000,
-      "Prairie": 80000,
-      "Premier": 70000,
-      "Previon": 850000,
-      "Progen P1": 7000000,
-      "Raiden": 2500000,
-      "Rancher XL": 250000,
-      "Rapid GT": 1600000,
-      "Raptor": 2000000,
-      "Rat-Loader": 5000,
-      "Rat-Truck": 70000,
-      "RE-7B": 3700000,
-      "Reaper": 3700000,
-      "Rebel": 48000,
-      "Rebla GTS": 3700000,
-      "Regina": 39000,
-      "Remus": 950000,
-      "Revolter": 3000000,
-      "Rhapsody": 172000,
-      "Riata": 360000,
-      "Rocoto": 2000000,
-      "Ruiner": 385000,
-      "Rumpo": 290000,
-      "Ruston": 2990000,
-      "Rusty Rebel": 32000,
-      "Sabre Turbo": 148000,
-      "Sandking SWB": 265000,
-      "Sandking XL": 250000,
-      "SC-1": 3150000,
-      "Schafter": 1350000,
-      "Schafter LWB": 1300000,
-      "Schafter LWB (Armored)": 4000000,
-      "Schafter V12": 1450000,
-      "Schlagen GT": 4500000,
-      "Schwarzer": 1150000,
-      "Seminole": 1500000,
-      "Sentinel Classic": 600000,
-      "Sentinel XS": 1300000,
-      "Serrano": 1200000,
-      "Seven-70": 3100000,
-      "Shelby GT500": 1500000,
-      "Slamvan": 85000,
-      "Slamvan Custom": 435000,
-      "Specter": 2800000,
-      "Stafford": 1300000,
-      "StafVapid": null,
-      "Stalion": 147000,
-      "Stinger": 1300000,
-      "Stinger GT": 1420000,
-      "Stirling GT": 1000000,
-      "Streiter": 1700000,
-      "Stretch": 5000000,
-      "Sultan": 350000,
-      "Sultan Classic": 758000,
-      "Sultan RS": 750000,
-      "Sultan RS Classic": 1000000,
-      "Super Diamond": 2800000,
-      "SuperVolito Carbon": 11000000,
-      "Surano": 2850000,
-      "Surge": 135000,
-      "Swinger": 1900000,
-      "T-20": 3450000,
-      "Tailgater": 1100000,
-      "Tailgater S": 2800000,
-      "Taipan": 3700000,
-      "Tampa": 163000,
-      "Tempesta": 3590000,
-      "Tezeract": 4250000,
-      "Thrax": 3850000,
-      "Tigon": 3000000,
-      "Torero": 1900000,
-      "Toros": 2400000,
-      "Tropos Rallye": 2200000,
-      "Truffade Chiron": 10000000,
-      "Tulip": 140000,
-      "Turismo Classic": 2800000,
-      "Turismo R": 3150000,
-      "Tyrant": 2950000,
-      "Tyrus": 3900000,
-      "Ubermacht 760 (LI)": 4000000,
-      "Ubermacht I8": 3900000,
-      "Ubermacht M3 (E46)": 380000,
-      "Ubermacht M3 (G80)": 3800000,
-      "Ubermacht M3 CS": 12000000,
-      "Ubermacht M4 (G82)": 3500000,
-      "Ubermacht M4 (GTS)": 19000000,
-      "Ubermacht M5 (CS)": 10000000,
-      "Ubermacht M5 (E34)": 120000,
-      "Ubermacht M5 (E60)": 1000000,
-      "Ubermacht M5 (F90)": 4000000,
-      "Ubermacht M8 (F91)": 4200000,
-      "Ubermacht X5 (E70)": 2300000,
-      "Ubermacht X5 (G05)": 5000000,
-      "Ubermacht X5-M (F95)": 15000000,
-      "Ubermacht X6-M (E71)": 3000000,
-      "Ubermacht X6-M 2021": null,
-      "Ubermacht X7 (G07)": 6000000,
-      "V-STR": 2700000,
-      "Vacca": 3720000,
-      "Vagner": 2850000,
-      "Vamos": 200000,
-      "Vapid Mustang GT500": null,
-      "Vapid Raptor (F150)": 4500000,
-      "Vectre": 3100000,
-      "Velierer": null,
-      "Vigero": null,
-      "Virgo": 150000,
-      "Virgo Classic": 160000,
-      "Visione": 3000000,
-      "Voltic": 1750000,
-      "Voodoo": 14000,
-      "Voodoo Custom": 154000,
-      "Warrener": 50000,
-      "Warrener HKR": 130000,
-      "Washington": 560000,
-      "Windsor": 1700000,
-      "Windsor Drop": 1900000,
-      "X80 Proto": 4200000,
-      "XA-21": 2100000,
-      "XLS": 1700000,
-      "XLS (Armored)": 3800000,
-      "Yosemite": 125000,
-      "Yosemite Rancher": 510000,
-      "Z-Type": 990000,
-      "Zentorno": 2999000,
-      "Zion": 360000,
-      "Zion Cabrio": 399000,
-      "Zion Classic": 50000,
-      "Zorrusso": 3450000,
-      "9F": 1550000,
-      "9F Cabrio": 1650000,
-     "Sparrow": null,
-     "Swift Deluxe": 12000000,
-     "Nimbus": 10000000,
-     "V-65 Molotok": 6000000,
-   };
-function parsePrice(str) {
-      str = str.replace(/[$]/g, '').toLowerCase();
-      if (str.endsWith('k')) return parseFloat(str) * 1000;
-      if (str.endsWith('m')) return parseFloat(str) * 1000000;
-      if (str.includes('million')) return parseFloat(str) * 1000000;
-      return parseFloat(str);
-    }
+</div>
 
-    function formatPrice(val) {
-      if (val >= 1000000) {
-        const rounded = (val / 1000000).toFixed(1).replace(/\.0$/, '');
-        return `$${rounded} Million`;
-      } else {
-        return `$${Math.round(val).toLocaleString('en-US').replace(/,/g, '.')}`;
-      }
-    }
+<script type="module">
+  import { buildAutoAd } from './en3-rules/auto-rules.js';
+  import { ALL_VEHICLES, isRentOnly } from './vehicle-list.js';
 
-function generateAd() {
-  const name = document.getElementById("carName").value.trim();
-  const transaction = document.querySelector(".ad-type-btn.active-btn")?.dataset.type || "Trading";
-  const trading = document.getElementById("trading").checked;
-  const secondCar = document.getElementById("secondCar").value.trim();
-  const priceInput = document.getElementById("price").value.trim();
-  const priceValue = parsePrice(priceInput);
-  const basePrice = stateValues[name];
+  window.navigateTo = (page) => { window.location.href = page; };
 
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-  let config = '', extras = [];
-  checkboxes.forEach(cb => {
-    if (cb.value === 'Full' || cb.value === 'Partial') config = cb.value;
-    else if (cb.id !== 'trading') extras.push(cb.value);
+  // --- vehicle datalist doldur ---
+  const vList = document.getElementById('vehicleOptions');
+  ALL_VEHICLES.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    vList.appendChild(opt);
   });
 
-  if (!name || !(name in stateValues)) {
-    document.getElementById("output").innerText = "Invalid ad.";
-    return;
-  }
-
-  // === 1. Giriş cümlesi
-let ad = transaction ? `${transaction.charAt(0).toUpperCase() + transaction.slice(1).toLowerCase()} "${name}"` : `Trading "${name}"`;
-
-  // === 2. Konfigürasyon ve özellikler (ilk araç için)
-  if (config) ad += ` in ${config.toLowerCase()} configuration`;
-
-  if (extras.length > 0) {
-    const loweredExtras = extras.map(e => e.toLowerCase());
-    const extraText = loweredExtras.length === 1
-      ? loweredExtras[0]
-      : `${loweredExtras.slice(0, -1).join(", ")} and ${loweredExtras[loweredExtras.length - 1]}`;
-    ad += ` with ${extraText}`;
-  }
-
-  // === 3. Eğer trading varsa ikinci araç
-  if ((transaction === "Selling or Trading" || transaction === "Trading") && secondCar) {
-    ad += ` for "${secondCar}"`;
-  }
-
-  // === 4. Cümle sonlandırma (nokta)
-  if (!ad.trim().endsWith(".")) ad += ".";
-
-  // === 5. Fiyat cümlesi (her zaman yeni başlar)
-  const needsPrice = transaction === "Buying" || transaction === "Selling" || transaction === "Selling or Trading";
-  if (needsPrice) {
-    const label = transaction === "Buying" ? "Budget" : "Price";
-    if (!priceInput || isNaN(priceValue)) {
-      ad += ` ${label}: Negotiable.`;
-    } else {
-      const formattedPrice = formatPrice(priceValue);
-      if (typeof basePrice === "number" && priceValue < basePrice) {
-        ad += ` <span style="color:red;">${label}: ${formattedPrice}</span>`;
-      } else {
-        ad += ` ${label}: ${formattedPrice}.`;
-      }
-    }
-  }
-
-  document.getElementById("output").innerHTML = ad;
-}
-
-
-
-function copyAd() {
-  const text = document.getElementById("output").innerText;
-  if (!text) return;
-
-  navigator.clipboard.writeText(text).then(() => {
-    document.getElementById("copyMsg").classList.remove("hidden");
-    setTimeout(() => document.getElementById("copyMsg").classList.add("hidden"), 3000);
-
-    // Temizleme işlemleri
-    document.getElementById("output").innerText = "";
-    document.getElementById("price").value = "";
-    document.getElementById("carName").value = "";
-    document.getElementById("secondCar").value = "";
-
-    // Checkboxları sıfırla
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-  });
-}
-    document.getElementById("trading").addEventListener("change", () => {
-      document.getElementById("secondCarInput").classList.toggle("hidden", !document.getElementById("trading").checked);
+  // --- ad type secimi ---
+  let adType = '';
+  document.querySelectorAll('.ad-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+      btn.classList.add('active-btn');
+      adType = btn.dataset.type;
+      const lower = adType.toLowerCase();
+      document.getElementById('rentalPeriodWrap').classList.toggle('hidden', !lower.includes('renting'));
+      document.getElementById('tradeTargetWrap').classList.toggle('hidden', !(lower === 'trading' || lower === 'selling or trading'));
+      document.getElementById('quantityWrap').classList.toggle('hidden', !(lower.includes('renting')));
+      refreshNotSellableWarning();
     });
-    
-document.querySelectorAll(".ad-type-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".ad-type-btn").forEach(b => b.classList.remove("active-btn"));
-    btn.classList.add("active-btn");
   });
-});
 
-  </script>
+  // --- truck skin toggle ---
+  const isTruckSkin = document.getElementById('isTruckSkin');
+  isTruckSkin.addEventListener('change', () => {
+    document.getElementById('truckPercentWrap').classList.toggle('hidden', !isTruckSkin.checked);
+    document.getElementById('vehicleWrap').classList.toggle('hidden', isTruckSkin.checked);
+    document.getElementById('tradeTargetWrap').classList.toggle('hidden', isTruckSkin.checked || !['trading','selling or trading'].includes(adType.toLowerCase()));
+  });
+
+  // --- NOT SELLABLE uyarisi ---
+  const vehicleInput = document.getElementById('vehicleInput');
+  function refreshNotSellableWarning() {
+    const v = vehicleInput.value.trim();
+    const tag = document.getElementById('notSellableTag');
+    const lower = adType.toLowerCase();
+    const isRentType = lower.includes('renting');
+    if (v && isRentOnly(v) && !isRentType) {
+      tag.style.display = 'block';
+    } else {
+      tag.style.display = 'none';
+    }
+  }
+  vehicleInput.addEventListener('input', refreshNotSellableWarning);
+
+  // --- luminous wheels type input aktiflik ---
+  document.getElementById('luminousWheels').addEventListener('change', (e) => {
+    document.getElementById('luminousWheelsType').disabled = !e.target.checked;
+  });
+
+  // --- rental period gun alani ---
+  document.getElementById('periodType').addEventListener('change', (e) => {
+    document.getElementById('periodDaysWrap').classList.toggle('hidden', e.target.value !== 'per day');
+  });
+
+  function showWarning(msg) {
+    const box = document.getElementById('warningBox');
+    if (!msg) { box.style.display = 'none'; box.innerText = ''; return; }
+    box.innerText = msg;
+    box.style.display = 'block';
+  }
+
+  window.generateAd = function () {
+    showWarning('');
+    if (!adType) { showWarning('Lutfen ilan turunu secin.'); return; }
+
+    const state = {
+      adType,
+      vehicle: isTruckSkin.checked ? null : (vehicleInput.value.trim() || null),
+      quantity: parseInt(document.getElementById('vehicleQuantity').value, 10),
+      tradeTarget: document.getElementById('tradeTargetInput').value.trim() || null,
+      configuration: document.querySelector('input[name="config"]:checked').value,
+      visualUpgrades: document.getElementById('visualUpgrades').checked,
+      luminousWheels: document.getElementById('luminousWheels').checked,
+      luminousWheelsType: document.getElementById('luminousWheelsType').value || null,
+      insurance: document.getElementById('insurance').checked,
+      turboKit: document.getElementById('turboKit').checked,
+      driftKit: document.getElementById('driftKit').checked,
+      autoFair: document.getElementById('autoFair').checked,
+      priceRaw: document.getElementById('priceInput').value.trim(),
+      rentalPeriod: {
+        periodType: document.getElementById('periodType').value || null,
+        days: parseInt(document.getElementById('periodDays').value, 10) || null,
+      },
+      exclusiveTruckPercent: isTruckSkin.checked ? (document.getElementById('truckPercent').value || null) : null,
+    };
+
+    const { text, error } = buildAutoAd(state);
+    if (error) { showWarning(error); return; }
+    document.getElementById('output').innerText = text;
+  };
+
+  window.copyAd = function () {
+    const output = document.getElementById('output');
+    const msg = document.getElementById('successMsg');
+    if (!output.innerText || output.innerText === 'Ready to post ad will appear here...') return;
+    navigator.clipboard.writeText(output.innerText).then(() => {
+      output.innerText = 'Ready to post ad will appear here...';
+      msg.style.display = 'block';
+      setTimeout(() => (msg.style.display = 'none'), 3000);
+    });
+  };
+</script>
 </body>
 </html>
