@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Work Ads</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  input, select, textarea { color-scheme: dark; }
+  body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-size: 400% 400%;
+    animation: waveBG 20s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; min-height: 100vh; color: white; padding-top: 90px;
+  }
+  @keyframes waveBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .top-nav {
+    display: flex; justify-content: center; flex-wrap: nowrap; overflow-x: auto;
+    background-color: #1c1c1c; padding: 10px 20px; gap: 10px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+  .top-nav button {
+    background-color: #111; color: white; font-weight: bold; border: none;
+    border-radius: 10px; padding: 10px 16px; font-size: 15px; white-space: nowrap;
+    cursor: pointer; transition: background-color 0.3s ease;
+  }
+  .top-nav button:hover { background-color: #333; }
+
+  .ad-type-btn {
+    background: transparent; color: white; font-weight: bold;
+    border: 2px solid #555; border-radius: 14px; padding: 10px 20px;
+    font-size: 15px; cursor: pointer; transition: all 0.2s ease;
+  }
+  .ad-type-btn:hover { border-color: #888; }
+  .ad-type-btn.active-btn { border-color: #4da8ff; box-shadow: 0 0 8px rgba(77,168,255,0.5); }
+
+  .check-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+  .check-label input { width: 16px; height: 16px; accent-color: #4da8ff; }
+
+  .field-label { font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block; }
+
+  input[type="text"], input[type="number"], select {
+    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444;
+    background-color: #1c1c1c; color: white; font-size: 15px; box-sizing: border-box;
+  }
+  select:disabled, input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .card {
+    background: #121212; padding: 40px; border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 100%; max-width: 760px;
+    box-sizing: border-box;
+  }
+
+  .hint { font-size: 12px; color: #888; margin-top: 4px; }
+  .warning-box {
+    background: #3a1f1f; border: 1px solid #8b3a3a; color: #ffb4b4;
+    padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-top: 14px; display: none;
+  }
+  .output-box {
+    margin-top: 20px; background-color: #1c1c1c; padding: 16px; border-radius: 12px;
+    min-height: 50px; white-space: pre-line; font-size: 15px;
+  }
+  .success-msg {
+    margin-top: 12px; text-align: center; color: #d4ffd4; background-color: #1f6624;
+    padding: 10px; border-radius: 10px; font-size: 14px; display: none;
+  }
+  .actions { display: flex; justify-content: center; gap: 40px; margin-top: 24px; }
+  .actions button {
+    background: transparent; border: none; color: white; font-weight: bold;
+    font-size: 16px; cursor: pointer; padding: 8px 16px; border-radius: 8px;
+  }
+  .actions button:hover { background: #1c1c1c; }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <button onclick="navigateTo('new-auto-ads.html')">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')">Work</button>
+  <button onclick="navigateTo('dating-ads.html')">Dating</button>
+  <button onclick="navigateTo('other-ads.html')">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+</div>
+
+<div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
+  <div class="card">
+    <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Work Ads</h1>
+
+    <!-- Mode -->
+    <div class="flex justify-center gap-3 mb-6">
+      <button class="ad-type-btn" data-mode="hiring">Hiring</button>
+      <button class="ad-type-btn" data-mode="looking">Looking for work</button>
+    </div>
+
+    <!-- Special contexts -->
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <label class="check-label"><input type="checkbox" id="isConstructionSite"> Construction site</label>
+      <label class="check-label"><input type="checkbox" id="isSolarPlantation"> Solar panel plantation</label>
+    </div>
+
+    <!-- Construction site details -->
+    <div id="constructionWrap" class="mb-4 hidden">
+      <label class="field-label" for="siteNumber">Site Number (opsiyonel)</label>
+      <select id="siteNumber">
+        <option value="">-- Belirtme --</option>
+        <option value="1">№1 - on Vespucci Boulevard</option>
+        <option value="2">№2 - on Calais Avenue</option>
+        <option value="3">№3 - in Pillbox Hill</option>
+      </select>
+      <div id="rolesWrap" class="mt-3 hidden">
+        <span class="field-label">Roller (Hiring icin, birden fazla secilirse "workers" yazilir)</span>
+        <div class="flex gap-4 flex-wrap mt-1">
+          <label class="check-label"><input type="checkbox" class="role-cb" value="locksmith"> Locksmith</label>
+          <label class="check-label"><input type="checkbox" class="role-cb" value="electrician"> Electrician</label>
+          <label class="check-label"><input type="checkbox" class="role-cb" value="gardener"> Gardener</label>
+          <label class="check-label"><input type="checkbox" class="role-cb" value="surveyor"> Surveyor</label>
+          <label class="check-label"><input type="checkbox" class="role-cb" value="driver"> Driver</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Free profession -->
+    <div id="professionWrap" class="mb-4">
+      <label class="field-label" for="professionInput">Meslek (serbest metin, ornek listeden de secebilirsiniz)</label>
+      <input type="text" id="professionInput" list="professionOptions" placeholder="e.g. Trucker, Lawyer, DJ, firefighter...">
+      <datalist id="professionOptions">
+        <option>Trucker</option>
+        <option>Lawyer</option>
+        <option>DJ</option>
+        <option>Photographer</option>
+        <option>Bodyguard</option>
+        <option>Professional dancer</option>
+        <option>Personal driver</option>
+        <option>Assistant</option>
+        <option>Professional singer</option>
+      </datalist>
+    </div>
+
+    <!-- Hiring-only options -->
+    <div id="hiringOptionsWrap" class="hidden">
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <label class="check-label"><input type="checkbox" id="pluralToggle"> Coğul (workers/truckers gibi)</label>
+        <div>
+          <label class="field-label" for="yearsExp">Yil deneyimi (opsiyonel)</label>
+          <input type="number" id="yearsExp" placeholder="e.g. 3">
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="field-label" for="locationInput">Location (opsiyonel, "at X" formatinda)</label>
+        <select id="locationInput">
+          <option value="">Select</option>
+          <option>at TV station</option>
+          <option>at the beach market</option>
+          <option>at FIB</option>
+          <option>at the Casino</option>
+          <option>at Lifeinvader</option>
+          <option>at Vinewood Hills</option>
+          <option>at the city</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <span class="field-label">Salary / Bonus</span>
+        <select id="salaryMode">
+          <option value="negotiable">Salary: Negotiable</option>
+          <option value="salary">Salary: $X</option>
+          <option value="awarding_amount">Awarding $X bonus</option>
+          <option value="awarding_bonuses">Awarding bonuses</option>
+          <option value="paying_well">Paying well</option>
+        </select>
+      </div>
+      <div id="salaryAmountWrap" class="mb-4 hidden">
+        <label class="field-label" for="salaryAmount">Tutar</label>
+        <input type="text" id="salaryAmount" placeholder="$250k or $1.5m">
+      </div>
+    </div>
+
+    <!-- Looking-only options -->
+    <div id="lookingOptionsWrap" class="hidden mb-4">
+      <span class="field-label">Ifade sekli</span>
+      <select id="lookingPhrase">
+        <option value="looking_for_work">"{Meslek} looking for work."</option>
+        <option value="looking_to_work_as">"Looking to work as a {meslek}."</option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <button onclick="generateAd()">Submit</button>
+      <button onclick="copyAd()">Copy</button>
+    </div>
+
+    <div id="warningBox" class="warning-box"></div>
+    <div id="output" class="output-box">Ready to post ad will appear here...</div>
+    <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
+  </div>
+</div>
+
+<script type="module">
+  import { buildWorkAd } from './en3-rules/work-rules.js';
+
+  window.navigateTo = (page) => { window.location.href = page; };
+
+  let mode = '';
+  document.querySelectorAll('.ad-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+      btn.classList.add('active-btn');
+      mode = btn.dataset.mode;
+      document.getElementById('hiringOptionsWrap').classList.toggle('hidden', mode !== 'hiring');
+      document.getElementById('lookingOptionsWrap').classList.toggle('hidden', mode !== 'looking');
+      refreshRolesVisibility();
+    });
+  });
+
+  const constructionCb = document.getElementById('isConstructionSite');
+  const solarCb = document.getElementById('isSolarPlantation');
+  constructionCb.addEventListener('change', () => {
+    document.getElementById('constructionWrap').classList.toggle('hidden', !constructionCb.checked);
+    document.getElementById('professionWrap').classList.toggle('hidden', constructionCb.checked || solarCb.checked);
+    if (constructionCb.checked) solarCb.checked = false;
+    refreshRolesVisibility();
+  });
+  solarCb.addEventListener('change', () => {
+    document.getElementById('professionWrap').classList.toggle('hidden', constructionCb.checked || solarCb.checked);
+    if (solarCb.checked) { constructionCb.checked = false; document.getElementById('constructionWrap').classList.add('hidden'); }
+  });
+
+  function refreshRolesVisibility() {
+    document.getElementById('rolesWrap').classList.toggle('hidden', !(constructionCb.checked && mode === 'hiring'));
+  }
+
+  document.getElementById('salaryMode').addEventListener('change', (e) => {
+    document.getElementById('salaryAmountWrap').classList.toggle('hidden', !['salary', 'awarding_amount'].includes(e.target.value));
+  });
+
+  function showWarning(msg) {
+    const box = document.getElementById('warningBox');
+    if (!msg) { box.style.display = 'none'; box.innerText = ''; return; }
+    box.innerText = msg;
+    box.style.display = 'block';
+  }
+
+  window.generateAd = function () {
+    showWarning('');
+    if (!mode) { showWarning('Lutfen Hiring veya Looking for work secin.'); return; }
+
+    const isConstructionSite = constructionCb.checked;
+    const isSolarPlantation = solarCb.checked;
+    const roles = Array.from(document.querySelectorAll('.role-cb:checked')).map(cb => cb.value);
+    const siteNumber = parseInt(document.getElementById('siteNumber').value, 10) || null;
+    const profession = document.getElementById('professionInput').value.trim() || null;
+
+    const state = {
+      mode,
+      isConstructionSite,
+      isSolarPlantation,
+      siteNumber,
+      roles,
+      profession,
+      yearsExperience: parseInt(document.getElementById('yearsExp').value, 10) || null,
+      plural: document.getElementById('pluralToggle').checked,
+      location: document.getElementById('locationInput').value || null,
+      lookingPhrase: document.getElementById('lookingPhrase').value,
+      salary: {
+        mode: document.getElementById('salaryMode').value === 'negotiable' ? null : document.getElementById('salaryMode').value,
+        amountRaw: document.getElementById('salaryAmount').value.trim(),
+      },
+    };
+
+    const { text, error } = buildWorkAd(state);
+    if (error) { showWarning(error); return; }
+    document.getElementById('output').innerText = text;
+  };
+
+  function resetForm() {
+    mode = '';
+    document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+    document.getElementById('hiringOptionsWrap').classList.add('hidden');
+    document.getElementById('lookingOptionsWrap').classList.add('hidden');
+    constructionCb.checked = false;
+    solarCb.checked = false;
+    document.getElementById('constructionWrap').classList.add('hidden');
+    document.getElementById('professionWrap').classList.remove('hidden');
+    document.getElementById('siteNumber').value = '';
+    document.querySelectorAll('.role-cb').forEach(cb => cb.checked = false);
+    document.getElementById('professionInput').value = '';
+    document.getElementById('pluralToggle').checked = false;
+    document.getElementById('yearsExp').value = '';
+    document.getElementById('locationInput').value = '';
+    document.getElementById('lookingPhrase').value = 'looking_for_work';
+    document.getElementById('salaryMode').value = 'negotiable';
+    document.getElementById('salaryAmount').value = '';
+    document.getElementById('salaryAmountWrap').classList.add('hidden');
+    showWarning('');
+  }
+
+  window.copyAd = function () {
+    const output = document.getElementById('output');
+    const msg = document.getElementById('successMsg');
+    if (!output.innerText || output.innerText === 'Ready to post ad will appear here...') return;
+    navigator.clipboard.writeText(output.innerText).then(() => {
+      output.innerText = 'Ready to post ad will appear here...';
+      msg.style.display = 'block';
+      setTimeout(() => (msg.style.display = 'none'), 3000);
+      resetForm();
+    });
+  };
+</script>
+</body>
+</html>
