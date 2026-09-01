@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Select Server</title>
+  <link rel="stylesheet" href="login.css">
+  <style>
+    /* login.css'teki .login-container'i yeniden kullaniyoruz, sadece
+       genislik ve buton duzenini bu sayfaya ozel hafifce genisletiyoruz. */
+    .login-container {
+      width: 420px;
+    }
+    .server-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .server-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      border-radius: 10px;
+      border: none;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      box-sizing: border-box;
+    }
+    .server-btn:hover { transform: translateY(-1px); }
+
+    .server-btn.en1 { background-color: #3366ff; }
+    .server-btn.en1:hover { background-color: #254edb; }
+
+    .server-btn.en3 { background-color: #7c3aed; }
+    .server-btn.en3:hover { background-color: #6425d1; }
+
+    .server-sub {
+      display: block;
+      font-size: 12px;
+      font-weight: normal;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body class="login-body">
+  <div class="login-container">
+    <h2 class="login-title">Select Server</h2>
+
+    <div class="server-buttons">
+      <!-- EN1: canli, aktif kullanilan site -->
+      <a class="server-btn en1" href="https://magenta-pegasus-bfe020.netlify.app/main-menu.html">
+        EN1
+        <span class="server-sub">Mevcut / aktif sunucu</span>
+      </a>
+
+      <!-- EN3: Netlify'a baglanip URL alindiktan sonra asagidaki "#" yerine
+           gercek main-menu.html adresini yazin, ornek:
+           https://ORNEK-SITE-ADI.netlify.app/main-menu.html -->
+      <a class="server-btn en3" href="https://luminous-bublanina-bb92db.netlify.app/main-menu.html">
+        EN3
+        <span class="server-sub">EN3 sunucusuna git</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- EN3 URL artik yukaridaki linkte sabit yazili, ekstra JS gerekmiyor -->
+</body>
+</html>
