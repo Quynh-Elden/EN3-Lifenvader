@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Other Ads</title>
+<title>Dating Ads</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   input, select, textarea { color-scheme: dark; }
@@ -31,31 +31,36 @@
   }
   .top-nav button:hover { background-color: #333; }
 
-  .sub-btn {
+  .mode-btn {
     background: transparent; color: white; font-weight: bold;
-    border: 2px solid #555; border-radius: 14px; padding: 8px 14px;
-    font-size: 13px; cursor: pointer; transition: all 0.2s ease;
+    border: 2px solid #555; border-radius: 14px; padding: 10px 20px;
+    font-size: 15px; cursor: pointer; transition: all 0.2s ease;
   }
-  .sub-btn:hover { border-color: #888; }
-  .sub-btn.active-btn { border-color: #4da8ff; box-shadow: 0 0 8px rgba(77,168,255,0.5); }
+  .mode-btn:hover { border-color: #888; }
+  .mode-btn.active-btn { border-color: #4da8ff; box-shadow: 0 0 8px rgba(77,168,255,0.5); }
 
   .check-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
   .check-label input { width: 16px; height: 16px; accent-color: #4da8ff; }
 
   .field-label { font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block; }
 
-  input[type="text"], input[type="number"], input[type="time"], select {
+  input[type="text"], select {
     width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444;
     background-color: #1c1c1c; color: white; font-size: 15px; box-sizing: border-box;
   }
 
   .card {
     background: #121212; padding: 40px; border-radius: 25px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 100%; max-width: 700px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 100%; max-width: 640px;
     box-sizing: border-box;
   }
 
   .hint { font-size: 12px; color: #888; margin-top: 4px; }
+  .reminder-box {
+    background: #1f2937; border: 1px solid #374151; color: #cbd5e1;
+    padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-top: 16px;
+  }
+  .reminder-box b { color: #facc15; }
   .warning-box {
     background: #3a1f1f; border: 1px solid #8b3a3a; color: #ffb4b4;
     padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-top: 14px; display: none;
@@ -88,146 +93,45 @@
   <button onclick="navigateTo('other-ads.html')">Other</button>
   <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
   <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+  <button onclick="navigateTo('main-menu.html')">Main Menu</button>
 </div>
 
 <div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
   <div class="card">
-    <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Other Ads</h1>
+    <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Dating Ads</h1>
 
-    <div class="flex justify-center gap-2 flex-wrap mb-6">
-      <button class="sub-btn" data-sub="party">Party</button>
-      <button class="sub-btn" data-sub="service">Service</button>
-      <button class="sub-btn" data-sub="wedding">Wedding</button>
-      <button class="sub-btn" data-sub="carmeet">Car meet</button>
-      <button class="sub-btn" data-sub="bet">Poker / Dice</button>
-      <button class="sub-btn" data-sub="alliance">Alliance</button>
-      <button class="sub-btn" data-sub="owner">Business owner</button>
+    <div class="flex justify-center gap-3 mb-6">
+      <button class="mode-btn" data-mode="fixed">Fixed phrase</button>
+      <button class="mode-btn" data-mode="person">Specific person</button>
     </div>
 
-    <!-- PARTY -->
-    <div id="partyWrap" class="hidden">
-      <label class="check-label mb-3"><input type="checkbox" id="hasParty"> I'm announcing a party (uncheck = "Looking for a party.")</label>
-      <div id="partyDetails" class="hidden">
-        <label class="check-label mb-3"><input type="checkbox" id="isPool"> Pool party</label>
-        <div class="grid grid-cols-2 gap-4 mb-2">
-          <div>
-            <label class="field-label" for="partyLocation">Location</label>
-            <select id="partyLocation">
-              <option value="">-- Select --</option>
-              <option>the beach</option>
-              <option>the yacht</option>
-              <option>Bahama Mamas Bar</option>
-              <option>Tequi-la-la Bar</option>
-              <option>Stadium</option>
-              <option>Diamond Resort Bar</option>
-              <option>Arena</option>
-              <option>Raton Canyon</option>
-              <option>Vanilla Unicorn Bar</option>
-              <option>Hotel Spa Bar</option>
-              <option>Cayo Perico</option>
-            </select>
-          </div>
-          <div>
-            <label class="field-label" for="houseNumber">or House № (yerine)</label>
-            <input type="number" id="houseNumber" placeholder="e.g. 37">
-          </div>
-        </div>
-        <div class="hint">Mega Mall, gang headquarters, Black Market, LSPD/FIB/SAHP/EMS/LifeInvader/government buildings, and the ghetto cannot be promoted for parties (warning).</div>
-      </div>
+    <!-- Fixed phrase -->
+    <div id="fixedWrap" class="mb-4 hidden">
+      <label class="field-label" for="phraseSelect">Phrase</label>
+      <select id="phraseSelect"></select>
+      <div class="hint">Only the phrases in this list are allowed in this category — the policy does not permit free text here.</div>
     </div>
 
-    <!-- SERVICE -->
-    <div id="serviceWrap" class="hidden">
-      <label class="field-label" for="serviceSelect">Profession</label>
-      <select id="serviceSelect">
-        <option value="lawyer">lawyer</option>
-        <option value="personal driver">personal driver</option>
-        <option value="professional dancer">professional dancer</option>
-        <option value="professional singer">professional singer</option>
-        <option value="DJ">DJ</option>
-      </select>
-    </div>
-
-    <!-- WEDDING -->
-    <div id="weddingWrap" class="hidden">
+    <!-- Specific person -->
+    <div id="personWrap" class="hidden">
       <div class="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label class="field-label" for="person1">Person 1 (optional)</label>
-          <input type="text" id="person1" placeholder="e.g. John Smith">
+          <label class="field-label" for="firstName">First Name</label>
+          <input type="text" id="firstName" placeholder="e.g. Queen">
         </div>
         <div>
-          <label class="field-label" for="person2">Person 2 (optional)</label>
-          <input type="text" id="person2" placeholder="e.g. Susan Jones">
+          <label class="field-label" for="lastName">Last Name</label>
+          <input type="text" id="lastName" placeholder="e.g. Targaryen">
         </div>
       </div>
-      <label class="field-label" for="weddingTime">Time (optional)</label>
-      <input type="time" id="weddingTime">
-    </div>
-
-    <!-- CAR MEET -->
-    <div id="carmeetWrap" class="hidden">
-      <label class="field-label" for="carMeetVehicle">Vehicle (optional — leave blank for a generic meet)</label>
-      <input type="text" id="carMeetVehicle" list="vehicleOptions" placeholder="Type to search vehicle list...">
-      <datalist id="vehicleOptions"></datalist>
-      <label class="field-label mt-3" for="carMeetLocation">Location</label>
-      <select id="carMeetLocation">
-        <option value="">Select</option>
-        <option>the Casino</option>
-        <option>Cayo Perico Island</option>
-        <option>Church</option>
-        <option>Del Perro</option>
-        <option>Downtown Vinewood</option>
-        <option>Eclipse Tower</option>
-        <option>El Burro Heights</option>
-        <option>Hospital</option>
-        <option>Little Seoul</option>
-        <option>Lifeinvader</option>
-        <option>Mirror Park</option>
-        <option>Richman</option>
-        <option>Rockford Hills</option>
-        <option>Pacific Bluffs Country Club</option>
-        <option>Paleto Bay</option>
-        <option>Pillbox Hill</option>
-        <option>Postal</option>
-        <option>Rancho</option>
-        <option>Sandy Shores</option>
-        <option>Stock Exchange</option>
-        <option>Vespucci Canals</option>
-        <option>Vinewood Hills</option>
-        <option>West Vinewood</option>
-        <option>the ghetto</option>
-        <option>the beach</option>
-        <option>the beach market</option>
-        <option>Stadium</option>
-        <option>Fire Station</option>
-        <option>the train station</option>
-        <option>the post office</option>
-        <option>the city</option>
-      </select>
-    </div>
-
-    <!-- POKER/DICE -->
-    <div id="betWrap" class="hidden">
-      <label class="field-label" for="gameSelect">Game</label>
-      <select id="gameSelect">
-        <option value="poker">Poker</option>
-        <option value="dice">Dice</option>
-      </select>
-      <label class="field-label mt-3" for="betAmount">Bet (optional — max $10 Million, above that becomes Negotiable)</label>
-      <input type="text" id="betAmount" placeholder="$100k (leave blank = Negotiable)">
-    </div>
-
-    <!-- ALLIANCE -->
-    <div id="allianceWrap" class="hidden">
-      <div class="hint">This produces a fixed phrase: "Looking for an alliance." No fields needed.</div>
-    </div>
-
-    <!-- BUSINESS OWNER -->
-    <div id="ownerWrap" class="hidden">
-      <label class="field-label" for="ownerBusinessSelect">Business type</label>
-      <select id="ownerBusinessSelect">
-        <option value="">Generic (any business)</option>
-      </select>
+      <label class="check-label mb-2"><input type="checkbox" id="isClassified"> This person is a State Leader/Deputy AND is NOT on the LI mails leader-list</label>
+      <div class="reminder-box">
+        <b>Reminder (cannot be checked automatically):</b><br>
+        • Did you search this name in the GRAND RP mail database? If not found, reject with: "Person not found in database."<br>
+        • If a specific FAMILY name is being searched for, this category does not allow it — reject the ad.<br>
+        • If 3+ people are looking for each other (trolling), reject the ad.<br>
+        • Troll phrases like "sugar daddy", or a price/budget listed for a wife/husband → add to the phone blacklist.
+      </div>
     </div>
 
     <div class="actions">
@@ -243,49 +147,33 @@
 </div>
 
 <script type="module">
-  import {
-    buildPartyAd, buildServiceAd, buildWeddingAd, buildCarMeetAd,
-    buildBetAd, buildAllianceAd, buildBusinessOwnerAd, OWNER_SEARCHABLE_BUSINESSES,
-  } from './en3-rules/other-rules.js';
-  import { ALL_VEHICLES } from './vehicle-list.js';
+  import { buildDatingAd, FIXED_PHRASES } from './en3-rules/dating-rules.js';
 
   window.navigateTo = (page) => { window.location.href = page; };
 
   // --- Created Ads sayaci (localStorage, sadece bu tarayicida kalici) ---
-  let adCount_other = parseInt(localStorage.getItem('adCount_other')) || 0;
+  let adCount_dating = parseInt(localStorage.getItem('adCount_dating')) || 0;
   function updateAdCounter() {
-    document.getElementById('adCounter').innerText = `Created Ads: ${adCount_other}`;
+    document.getElementById('adCounter').innerText = `Created Ads: ${adCount_dating}`;
   }
   updateAdCounter();
 
-  const vehicleList = document.getElementById('vehicleOptions');
-  ALL_VEHICLES.forEach(name => {
+  const phraseSelect = document.getElementById('phraseSelect');
+  FIXED_PHRASES.forEach(p => {
     const opt = document.createElement('option');
-    opt.value = name;
-    vehicleList.appendChild(opt);
+    opt.value = p.key; opt.textContent = p.label;
+    phraseSelect.appendChild(opt);
   });
 
-  const ownerSelect = document.getElementById('ownerBusinessSelect');
-  OWNER_SEARCHABLE_BUSINESSES.forEach(name => {
-    const opt = document.createElement('option');
-    opt.value = name; opt.textContent = name;
-    ownerSelect.appendChild(opt);
-  });
-
-  const wraps = ['party', 'service', 'wedding', 'carmeet', 'bet', 'alliance', 'owner'];
-  let sub = '';
-  document.querySelectorAll('.sub-btn').forEach(btn => {
+  let mode = '';
+  document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active-btn'));
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active-btn'));
       btn.classList.add('active-btn');
-      sub = btn.dataset.sub;
-      wraps.forEach(w => document.getElementById(`${w}Wrap`).classList.toggle('hidden', w !== sub));
+      mode = btn.dataset.mode;
+      document.getElementById('fixedWrap').classList.toggle('hidden', mode !== 'fixed');
+      document.getElementById('personWrap').classList.toggle('hidden', mode !== 'person');
     });
-  });
-
-  const hasPartyCb = document.getElementById('hasParty');
-  hasPartyCb.addEventListener('change', () => {
-    document.getElementById('partyDetails').classList.toggle('hidden', !hasPartyCb.checked);
   });
 
   function showWarning(msg) {
@@ -297,65 +185,33 @@
 
   window.generateAd = function () {
     showWarning('');
-    if (!sub) { showWarning('Please select a sub-category above.'); return; }
+    if (!mode) { showWarning('Please select "Fixed phrase" or "Specific person".'); return; }
 
-    let result;
-    if (sub === 'party') {
-      result = buildPartyAd({
-        hasParty: hasPartyCb.checked,
-        isPool: document.getElementById('isPool').checked,
-        location: document.getElementById('partyLocation').value || null,
-        houseNumber: document.getElementById('houseNumber').value || null,
-      });
-    } else if (sub === 'service') {
-      result = buildServiceAd({ profession: document.getElementById('serviceSelect').value });
-    } else if (sub === 'wedding') {
-      result = buildWeddingAd({
-        person1: document.getElementById('person1').value.trim() || null,
-        person2: document.getElementById('person2').value.trim() || null,
-        time: document.getElementById('weddingTime').value || null,
-      });
-    } else if (sub === 'carmeet') {
-      result = buildCarMeetAd({
-        vehicleName: document.getElementById('carMeetVehicle').value.trim() || null,
-        location: document.getElementById('carMeetLocation').value.trim() || null,
-      });
-    } else if (sub === 'bet') {
-      result = buildBetAd({
-        game: document.getElementById('gameSelect').value,
-        betRaw: document.getElementById('betAmount').value.trim(),
-      });
-    } else if (sub === 'alliance') {
-      result = buildAllianceAd();
-    } else if (sub === 'owner') {
-      result = buildBusinessOwnerAd({ businessName: ownerSelect.value || null });
-    }
+    const state = {
+      mode,
+      phraseKey: phraseSelect.value,
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      isClassifiedPerson: document.getElementById('isClassified').checked,
+    };
 
-    if (result.error) { showWarning(result.error); return; }
-    document.getElementById('output').innerText = result.text;
-    adCount_other++;
-    localStorage.setItem('adCount_other', adCount_other);
+    const { text, error } = buildDatingAd(state);
+    if (error) { showWarning(error); return; }
+    document.getElementById('output').innerText = text;
+    adCount_dating++;
+    localStorage.setItem('adCount_dating', adCount_dating);
     updateAdCounter();
   };
 
   function resetForm() {
-    sub = '';
-    document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active-btn'));
-    wraps.forEach(w => document.getElementById(`${w}Wrap`).classList.add('hidden'));
-    hasPartyCb.checked = false;
-    document.getElementById('partyDetails').classList.add('hidden');
-    document.getElementById('isPool').checked = false;
-    document.getElementById('partyLocation').value = '';
-    document.getElementById('houseNumber').value = '';
-    document.getElementById('serviceSelect').value = 'lawyer';
-    document.getElementById('person1').value = '';
-    document.getElementById('person2').value = '';
-    document.getElementById('weddingTime').value = '';
-    document.getElementById('carMeetVehicle').value = '';
-    document.getElementById('carMeetLocation').value = '';
-    document.getElementById('gameSelect').value = 'poker';
-    document.getElementById('betAmount').value = '';
-    ownerSelect.value = '';
+    mode = '';
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active-btn'));
+    document.getElementById('fixedWrap').classList.add('hidden');
+    document.getElementById('personWrap').classList.add('hidden');
+    phraseSelect.value = FIXED_PHRASES[0].key;
+    document.getElementById('firstName').value = '';
+    document.getElementById('lastName').value = '';
+    document.getElementById('isClassified').checked = false;
     showWarning('');
   }
 
