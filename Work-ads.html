@@ -89,6 +89,7 @@
   <button onclick="navigateTo('other-ads.html')">Other</button>
   <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
   <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+  <button onclick="navigateTo('main-menu.html')">Main Menu</button>
 </div>
 
 <div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
@@ -109,7 +110,7 @@
 
     <!-- Construction site details -->
     <div id="constructionWrap" class="mb-4 hidden">
-      <label class="field-label" for="siteNumber">Site Number (opsiyonel)</label>
+      <label class="field-label" for="siteNumber">Site Number (optional)</label>
       <select id="siteNumber">
         <option value="">-- Belirtme --</option>
         <option value="1">№1 - on Vespucci Boulevard</option>
@@ -130,7 +131,7 @@
 
     <!-- Free profession -->
     <div id="professionWrap" class="mb-4">
-      <label class="field-label" for="professionInput">Meslek (serbest metin, ornek listeden de secebilirsiniz)</label>
+      <label class="field-label" for="professionInput">Profession (free text, or pick from the example list)</label>
       <input type="text" id="professionInput" list="professionOptions" placeholder="e.g. Trucker, Lawyer, DJ, firefighter...">
       <datalist id="professionOptions">
         <option>Trucker</option>
@@ -150,13 +151,13 @@
       <div class="grid grid-cols-2 gap-4 mb-4">
         <label class="check-label"><input type="checkbox" id="pluralToggle"> Coğul (workers/truckers gibi)</label>
         <div>
-          <label class="field-label" for="yearsExp">Yil deneyimi (opsiyonel)</label>
+          <label class="field-label" for="yearsExp">Years of experience (optional)</label>
           <input type="number" id="yearsExp" placeholder="e.g. 3">
         </div>
       </div>
 
       <div class="mb-4">
-        <label class="field-label" for="locationInput">Location (opsiyonel, "at X" formatinda)</label>
+        <label class="field-label" for="locationInput">Location (optional, "at X" format)</label>
         <select id="locationInput">
           <option value="">Select</option>
           <option>at TV station</option>
@@ -189,7 +190,7 @@
     <div id="lookingOptionsWrap" class="hidden mb-4">
       <span class="field-label">Ifade sekli</span>
       <select id="lookingPhrase">
-        <option value="looking_for_work">"{Meslek} looking for work."</option>
+        <option value="looking_for_work">"{Profession} looking for work."</option>
         <option value="looking_to_work_as">"Looking to work as a {meslek}."</option>
       </select>
     </div>
