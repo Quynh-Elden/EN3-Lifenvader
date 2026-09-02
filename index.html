@@ -18,13 +18,29 @@
   </div>
 
   <script>
+    // ---------------------------------------------------------------------
+    // KULLANICI LISTESI — her satir bir kisiye ait giris bilgisi.
+    // Kendi ekibinizin isimlerini/sifrelerini buraya yazin, satir sayisini
+    // istediginiz kadar artirip azaltabilirsiniz (virgulle ayirmayi unutmayin).
+    // ---------------------------------------------------------------------
+    const USERS = [
+      { username: "Nazo",  password: "Nazo1923" },  // mevcut, degismedi
+      { username: "USER2", password: "PASSWORD2" }, // <-- kendi bilginizle degistirin
+      { username: "USER3", password: "PASSWORD3" },
+      { username: "USER4", password: "PASSWORD4" },
+      { username: "USER5", password: "PASSWORD5" },
+      { username: "USER6", password: "PASSWORD6" },
+      { username: "USER7", password: "PASSWORD7" },
+    ];
+
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      // Giriş kontrolü
-      if (username === "Nazo" && password === "Nazo1923") {
+      const found = USERS.some(u => u.username === username && u.password === password);
+
+      if (found) {
         window.location.href = "welcome.html";
       } else {
         alert("Hatalı kullanıcı adı veya şifre.");
