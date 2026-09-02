@@ -89,6 +89,7 @@
   <button onclick="navigateTo('other-ads.html')">Other</button>
   <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
   <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+  <button onclick="navigateTo('main-menu.html')">Main Menu</button>
 </div>
 
 <div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
@@ -120,7 +121,7 @@
     <!-- Plantation crop -->
     <div id="plantationWrap" class="grid grid-cols-2 gap-4 mb-4 hidden">
       <div>
-        <label class="field-label" for="plantationCrop">Mahsul (opsiyonel)</label>
+        <label class="field-label" for="plantationCrop">Crop (optional)</label>
         <select id="plantationCrop">
           <option value="">-- Genel "Plantation" --</option>
           <option>Pumpkin</option>
@@ -138,13 +139,13 @@
     <!-- Number / suffix -->
     <div class="grid grid-cols-2 gap-4 mb-4">
       <div>
-        <label class="field-label" for="businessNumber">Number №  (varsa)</label>
+        <label class="field-label" for="businessNumber">Number № (if any)</label>
         <input type="number" id="businessNumber" placeholder="e.g. 269">
       </div>
       <div>
         <label class="field-label" for="suffixSelect">Suffix</label>
         <select id="suffixSelect">
-          <option value="">business (varsayilan)</option>
+          <option value="">business (default)</option>
           <option value="control">Control</option>
           <option value="shares" id="sharesOption">shares (sadece uygun isletmeler)</option>
         </select>
@@ -161,7 +162,7 @@
 
     <!-- Location -->
     <div class="mb-4">
-      <label class="field-label" for="locationInput">Location (opsiyonel)</label>
+      <label class="field-label" for="locationInput">Location (optional)</label>
       <select id="locationInput">
         <option value="">Select</option>
         <option>in the Casino</option>
@@ -206,7 +207,7 @@
     <!-- Price -->
     <div class="mb-4">
       <label class="field-label" for="priceInput">Price / Budget</label>
-      <input type="text" id="priceInput" placeholder="$250k or $1.5m (bos = Negotiable, 500M usti = Negotiable)">
+      <input type="text" id="priceInput" placeholder="$250k or $1.5m (leave blank = Negotiable, above 500M = Negotiable)">
     </div>
 
     <div class="actions">
