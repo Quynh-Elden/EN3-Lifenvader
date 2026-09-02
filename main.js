@@ -7,8 +7,8 @@ let adCount = parseInt(localStorage.getItem('adCount')) || 0;
 
 document.querySelectorAll('.ad-type-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('ring-4'));
-    btn.classList.add('ring-4', 'ring-yellow-300');
+    document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
+    btn.classList.add('active-btn');
     adType = btn.dataset.type;
   });
 });
@@ -25,7 +25,7 @@ function createItemSection() {
   if (itemCount >= 3) return;
   itemCount++;
   const container = document.createElement('div');
-  container.className = "bg-gray-700 p-4 rounded-lg space-y-2 item-section";
+  container.className = "bg-[#1c1c1c] border border-[#333] p-4 rounded-lg space-y-2 item-section";
   container.innerHTML = `
         <label><input type="number" min="1" class="item-quantity w-20 px-1 py-1 rounded bg-gray-800 text-white" placeholder="Qty"></label>
         <select placeholder="Select item..." class="item-select w-full"></select>
@@ -149,7 +149,7 @@ window.copyAd = function () {
     document.getElementById('itemsContainer').innerHTML = "";
     itemCount = 0;
     createItemSection();
-    document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('ring-4'));
+    document.querySelectorAll('.ad-type-btn').forEach(b => b.classList.remove('active-btn'));
     adType = "";
     showToast("✅ Copied! Ad cleared.", "bg-green-600");
   }).catch(err => {
