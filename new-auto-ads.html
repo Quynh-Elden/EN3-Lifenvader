@@ -93,6 +93,7 @@
   <button onclick="navigateTo('other-ads.html')">Other</button>
   <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
   <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+  <button onclick="navigateTo('main-menu.html')">Main Menu</button>
 </div>
 
 <div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
@@ -111,7 +112,7 @@
 
     <!-- Exclusive truck skin toggle -->
     <div class="mb-4">
-      <label class="check-label"><input type="checkbox" id="isTruckSkin"> Exclusive truck skin rental (% kaplama)</label>
+      <label class="check-label"><input type="checkbox" id="isTruckSkin"> Exclusive truck skin rental (% coverage)</label>
       <div id="truckPercentWrap" class="hidden mt-2">
         <label class="field-label" for="truckPercent">Percent</label>
         <input type="number" id="truckPercent" placeholder="e.g. 20">
@@ -120,7 +121,7 @@
 
     <!-- Vehicle search -->
     <div id="vehicleWrap" class="mb-2">
-      <label class="field-label" for="vehicleInput">Vehicle (bos birakilirsa "a car" / "a vehicle" yazilir)</label>
+      <label class="field-label" for="vehicleInput">Vehicle (leave blank for "a car" / "a vehicle")</label>
       <input type="text" id="vehicleInput" list="vehicleOptions" placeholder="Type to search vehicle list...">
       <datalist id="vehicleOptions"></datalist>
       <div id="notSellableTag" class="not-sellable-tag">⚠ Bu arac "NOT SELLABLE" — sadece kiralanabilir/kiraya verilebilir.</div>
@@ -163,7 +164,7 @@
 
     <!-- Auto Fair -->
     <div class="mb-4">
-      <label class="check-label"><input type="checkbox" id="autoFair"> At Auto Fair (fiyat yazilmaz, "Negotiable" da yazilmaz)</label>
+      <label class="check-label"><input type="checkbox" id="autoFair"> At Auto Fair (no price shown, not even "Negotiable")</label>
     </div>
 
     <!-- Rental period -->
@@ -185,7 +186,7 @@
     <!-- Price -->
     <div id="priceWrap" class="mb-4">
       <label class="field-label" for="priceInput">Price / Budget / Rent</label>
-      <input type="text" id="priceInput" placeholder="$250k or $1.5m (bos = Negotiable)">
+      <input type="text" id="priceInput" placeholder="$250k or $1.5m (leave blank = Negotiable)">
     </div>
 
     <div class="actions">
