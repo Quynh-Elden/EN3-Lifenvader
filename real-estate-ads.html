@@ -91,6 +91,7 @@
   <button onclick="navigateTo('other-ads.html')">Other</button>
   <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
   <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+  <button onclick="navigateTo('main-menu.html')">Main Menu</button>
 </div>
 
 <div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
@@ -117,12 +118,12 @@
     <!-- Number / quantity row -->
     <div class="grid grid-cols-2 gap-4 mb-4">
       <div>
-        <label class="field-label" for="propNumber">Property №  (varsa)</label>
+        <label class="field-label" for="propNumber">Property № (if any)</label>
         <input type="number" id="propNumber" placeholder="e.g. 2345">
-        <div class="hint">Numara verilirse sadece 1 mulk ilan edilebilir.</div>
+        <div class="hint">If a number is given, only 1 property can be listed.</div>
       </div>
       <div id="quantityWrap">
-        <label class="field-label" for="propQuantity">Quantity (numara yoksa, max 3)</label>
+        <label class="field-label" for="propQuantity">Quantity (if no number, max 3)</label>
         <select id="propQuantity">
           <option value="1">1</option>
           <option value="2">2</option>
@@ -260,7 +261,7 @@
     <!-- Price -->
     <div class="mb-4">
       <label class="field-label" for="priceInput">Price / Budget / Rent</label>
-      <input type="text" id="priceInput" placeholder="$250k or $1.5m (bos birakilirsa Negotiable)">
+      <input type="text" id="priceInput" placeholder="$250k or $1.5m (leave blank for Negotiable)">
     </div>
 
     <div class="actions">
