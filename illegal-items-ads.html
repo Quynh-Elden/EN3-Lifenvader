@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Illegal Items</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  input, select, textarea { color-scheme: dark; }
+  body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-size: 400% 400%;
+    animation: waveBG 20s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; min-height: 100vh; color: white; padding-top: 90px;
+  }
+  @keyframes waveBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .top-nav {
+    display: flex; justify-content: center; flex-wrap: nowrap; overflow-x: auto;
+    background-color: #1c1c1c; padding: 10px 20px; gap: 10px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+  .top-nav button {
+    background-color: #111; color: white; font-weight: bold; border: none;
+    border-radius: 10px; padding: 10px 16px; font-size: 15px; white-space: nowrap;
+    cursor: pointer; transition: background-color 0.3s ease;
+  }
+  .top-nav button:hover { background-color: #333; }
+
+  .card {
+    background: #121212; padding: 36px; border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 100%; max-width: 820px;
+    box-sizing: border-box;
+  }
+
+  .section-title {
+    font-size: 15px; font-weight: 700; margin-bottom: 10px; margin-top: 24px;
+    padding-bottom: 6px; border-bottom: 1px solid #333;
+  }
+  .section-title.blacklist { color: #ff6b6b; }
+  .section-title.reject { color: #ffb84d; }
+  .section-title.warning { color: #ffe066; }
+
+  .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+  .item-label { display: flex; align-items: start; gap: 8px; font-size: 13px; cursor: pointer; padding: 3px 0; }
+  .item-label input { width: 15px; height: 15px; margin-top: 2px; flex-shrink: 0; }
+  .item-label.blacklist input { accent-color: #ff6b6b; }
+  .item-label.reject input { accent-color: #ffb84d; }
+  .item-label.warning input { accent-color: #ffe066; }
+
+  .actions { display: flex; justify-content: center; gap: 40px; margin-top: 28px; }
+  .actions button {
+    background: #1c1c1c; border: 1px solid #444; color: white; font-weight: bold;
+    font-size: 16px; cursor: pointer; padding: 10px 24px; border-radius: 10px;
+  }
+  .actions button:hover { background: #2a2a2a; }
+
+  .result-box { margin-top: 24px; padding: 20px; border-radius: 14px; display: none; }
+  .result-box.blacklist { background: #3a1414; border: 2px solid #ff6b6b; }
+  .result-box.reject { background: #3a2a10; border: 2px solid #ffb84d; }
+  .result-box.warning { background: #3a3510; border: 2px solid #ffe066; }
+  .result-box.none { background: #14301a; border: 2px solid #4ade80; }
+  .result-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+  .result-instructions { font-size: 14px; margin-bottom: 10px; opacity: 0.9; }
+  .result-reasons { font-size: 13px; white-space: pre-line; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; }
+
+  .success-msg {
+    margin-top: 12px; text-align: center; color: #d4ffd4; background-color: #1f6624;
+    padding: 10px; border-radius: 10px; font-size: 14px; display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <button onclick="navigateTo('new-auto-ads.html')">Auto</button>
+  <button onclick="navigateTo('real-estate-ads.html')">Real Estate</button>
+  <button onclick="navigateTo('business-ads.html')">Business</button>
+  <button onclick="navigateTo('items-clothes-ads.html')">Items & Clothes</button>
+  <button onclick="navigateTo('work-ads.html')">Work</button>
+  <button onclick="navigateTo('dating-ads.html')">Dating</button>
+  <button onclick="navigateTo('other-ads.html')">Other</button>
+  <button onclick="navigateTo('illegal-items-ads.html')">Illegal Items</button>
+  <button onclick="navigateTo('reject-reasons.html')">Reject Reasons</button>
+</div>
+
+<div style="display:flex; justify-content:center; align-items:flex-start; min-height:100vh;">
+  <div class="card">
+    <h1 class="text-3xl font-bold text-center text-blue-400 mb-2">Illegal Items Checker</h1>
+    <p class="text-center text-sm text-gray-400 mb-2">This is not an ad generator — check the boxes that apply to the ad you're reviewing, then Submit to get the correct verdict and reason text.</p>
+
+    <div class="section-title blacklist">🔴 Blacklist the phone number (select any that apply)</div>
+    <div id="blacklistGrid" class="item-grid"></div>
+
+    <div class="section-title reject">🟠 Reject only — no blacklist (select any that apply)</div>
+    <div id="rejectGrid" class="item-grid"></div>
+
+    <div class="section-title reject">🟠 Cannot be advertised at all (select any that apply)</div>
+    <div id="cannotGrid" class="item-grid"></div>
+
+    <div class="section-title warning">🟡 Places We Do Not Promote — warning only (select any that apply)</div>
+    <div id="warningGrid" class="item-grid"></div>
+
+    <div class="actions">
+      <button onclick="evaluate()">Submit</button>
+      <button onclick="copyResult()">Copy reason</button>
+    </div>
+
+    <div id="resultBox" class="result-box">
+      <div id="resultTitle" class="result-title"></div>
+      <div id="resultInstructions" class="result-instructions"></div>
+      <div id="resultReasons" class="result-reasons"></div>
+    </div>
+    <div id="successMsg" class="success-msg">✅ Copied to clipboard.</div>
+  </div>
+</div>
+
+<script type="module">
+  import {
+    evaluateIllegalItems, BLACKLIST_ITEMS, REJECT_ONLY_ITEMS,
+    CANNOT_ADVERTISE_ITEMS, WARNING_ONLY_PLACES,
+  } from './en3-rules/illegal-items-rules.js';
+
+  window.navigateTo = (page) => { window.location.href = page; };
+
+  function fillGrid(containerId, items, cls) {
+    const container = document.getElementById(containerId);
+    items.forEach((item, i) => {
+      const label = document.createElement('label');
+      label.className = `item-label ${cls}`;
+      label.innerHTML = `<input type="checkbox" data-item="${item.replace(/"/g, '&quot;')}"> <span>${item}</span>`;
+      container.appendChild(label);
+    });
+  }
+
+  fillGrid('blacklistGrid', BLACKLIST_ITEMS, 'blacklist');
+  fillGrid('rejectGrid', REJECT_ONLY_ITEMS, 'reject');
+  fillGrid('cannotGrid', CANNOT_ADVERTISE_ITEMS, 'reject');
+  fillGrid('warningGrid', WARNING_ONLY_PLACES, 'warning');
+
+  function getChecked(containerId) {
+    return Array.from(document.querySelectorAll(`#${containerId} input:checked`)).map(el => el.dataset.item);
+  }
+
+  let lastResult = null;
+
+  window.evaluate = function () {
+    const state = {
+      selectedBlacklist: getChecked('blacklistGrid'),
+      selectedRejectOnly: getChecked('rejectGrid'),
+      selectedCannotAdvertise: getChecked('cannotGrid'),
+      selectedWarningPlaces: getChecked('warningGrid'),
+    };
+
+    const result = evaluateIllegalItems(state);
+    lastResult = result;
+
+    const box = document.getElementById('resultBox');
+    box.className = `result-box ${result.action}`;
+    box.style.display = 'block';
+    document.getElementById('resultTitle').innerText = result.title;
+    document.getElementById('resultInstructions').innerText = result.instructions;
+    document.getElementById('resultReasons').innerText = result.reasons.join('\n');
+  };
+
+  window.copyResult = function () {
+    if (!lastResult) return;
+    const text = `${lastResult.title}\n${lastResult.instructions}\n${lastResult.reasons.join('\n')}`;
+    navigator.clipboard.writeText(text).then(() => {
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      setTimeout(() => (msg.style.display = 'none'), 3000);
+    });
+  };
+</script>
+</body>
+</html>
