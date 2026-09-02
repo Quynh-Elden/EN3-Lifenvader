@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Main Menu</title>
+<style>
+  body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background-size: 400% 400%;
+    animation: waveBG 20s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  @keyframes waveBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card {
+    background: #121212;
+    padding: 60px 80px;
+    border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    max-width: 1100px;
+    width: 90%;
+    box-sizing: border-box;
+  }
+
+  .main-title {
+    font-size: 34px;
+    font-weight: bold;
+    color: #4da8ff;
+    margin-bottom: 50px;
+  }
+
+  .menu-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 24px;
+    justify-items: center;
+    margin-bottom: 50px;
+  }
+
+  .menu-buttons a {
+    background: transparent;
+    color: white;
+    text-decoration: none;
+    border: 2px solid #555;
+    padding: 14px 28px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    width: 200px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .menu-buttons a:hover {
+    border-color: #4da8ff;
+    box-shadow: 0 0 8px rgba(77, 168, 255, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .exit-button a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: white;
+    border: 2px solid #555;
+    text-decoration: none;
+    padding: 10px 26px;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+  }
+
+  .exit-button a:hover {
+    border-color: #4da8ff;
+    box-shadow: 0 0 8px rgba(77, 168, 255, 0.5);
+  }
+
+  .exit-icon {
+    width: 20px;
+    height: 20px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="main-title">Main Menu</div>
+
+    <div class="menu-buttons">
+      <a href="new-auto-ads.html">Auto Ads</a>
+      <a href="real-estate-ads.html">Real Estate</a>
+      <a href="business-ads.html">Business Ads</a>
+      <a href="work-ads.html">Work Ads</a>
+      <a href="dating-ads.html">Dating Ads</a>
+      <a href="items-clothes-ads.html">Items & Clothes Ads</a>
+      <a href="other-ads.html">Other Ads</a>
+      <a href="illegal-items-ads.html">Illegal Items</a>
+      <a href="reject-reasons.html">Reject Reasons</a>
+    </div>
+
+    <!-- Exit -->
+    <div class="exit-button">
+      <a href="index.html">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png" alt="Logout" class="exit-icon">
+        Exit
+      </a>
+    </div>
+  </div>
+</body>
+</html>
