@@ -106,7 +106,7 @@
     <div id="warningGrid" class="item-grid"></div>
 
     <div class="actions">
-      <button onclick="evaluate()">Submit</button>
+      <button onclick="checkViolation()">Submit</button>
       <button onclick="copyResult()">Copy reason</button>
     </div>
 
@@ -148,7 +148,7 @@
 
   let lastResult = null;
 
-  window.evaluate = function () {
+  window.checkViolation = function () {
     const state = {
       selectedBlacklist: getChecked('blacklistGrid'),
       selectedRejectOnly: getChecked('rejectGrid'),
