@@ -109,13 +109,13 @@
       <label class="field-label" for="businessSelect">Business</label>
       <select id="businessSelect">
         <option value="">-- Select --</option>
-        <option value="Private business">Private business (isim belirtilmeden)</option>
+        <option value="Private business">Private business (no name specified)</option>
         <optgroup label="Private Businesses">
         </optgroup>
-        <optgroup label="Family Businesses (takas edilemez)">
+        <optgroup label="Family Businesses (cannot be traded)">
         </optgroup>
       </select>
-      <div id="familyHint" class="hint hidden">⚠ Aile isletmesi — sadece Buying/Selling, Trading yapilamaz.</div>
+      <div id="familyHint" class="hint hidden">⚠ Family business — Buying/Selling only, Trading not allowed.</div>
     </div>
 
     <!-- Plantation crop -->
@@ -131,7 +131,7 @@
         </select>
       </div>
       <div>
-        <label class="field-label" for="plantationBeds">Beds sayisi</label>
+        <label class="field-label" for="plantationBeds">Number of beds</label>
         <input type="number" id="plantationBeds" placeholder="e.g. 20">
       </div>
     </div>
@@ -147,14 +147,14 @@
         <select id="suffixSelect">
           <option value="">business (default)</option>
           <option value="control">Control</option>
-          <option value="shares" id="sharesOption">shares (sadece uygun isletmeler)</option>
+          <option value="shares" id="sharesOption">shares (eligible businesses only)</option>
         </select>
       </div>
     </div>
 
     <!-- Trade target -->
     <div id="tradeTargetWrap" class="mb-4 hidden">
-      <label class="field-label" for="tradeTargetSelect">Takas edilecek isletme (for X)</label>
+      <label class="field-label" for="tradeTargetSelect">Business to trade for (for X)</label>
       <select id="tradeTargetSelect">
         <option value="">-- Select --</option>
       </select>
@@ -237,7 +237,7 @@
   // --- business dropdown doldur ---
   const businessSelect = document.getElementById('businessSelect');
   const privateGroup = businessSelect.querySelector('optgroup[label="Private Businesses"]');
-  const familyGroup = businessSelect.querySelector('optgroup[label="Family Businesses (takas edilemez)"]');
+  const familyGroup = businessSelect.querySelector('optgroup[label="Family Businesses (cannot be traded)"]');
   PRIVATE_BUSINESSES.forEach(name => {
     const opt = document.createElement('option');
     opt.value = name; opt.textContent = name;
@@ -295,8 +295,8 @@
 
   window.generateAd = function () {
     showWarning('');
-    if (!adType) { showWarning('Lutfen ilan turunu secin.'); return; }
-    if (!businessSelect.value) { showWarning('Lutfen bir isletme secin.'); return; }
+    if (!adType) { showWarning('Please select an ad type.'); return; }
+    if (!businessSelect.value) { showWarning('Please select a business.'); return; }
 
     const state = {
       adType,
