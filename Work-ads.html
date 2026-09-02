@@ -202,6 +202,7 @@
     <div id="warningBox" class="warning-box"></div>
     <div id="output" class="output-box">Ready to post ad will appear here...</div>
     <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
+    <div id="adCounter" class="hint" style="text-align:center; margin-top:10px;">Created Ads: 0</div>
   </div>
 </div>
 
@@ -209,6 +210,13 @@
   import { buildWorkAd } from './en3-rules/work-rules.js';
 
   window.navigateTo = (page) => { window.location.href = page; };
+
+  // --- Created Ads sayaci (localStorage, sadece bu tarayicida kalici) ---
+  let adCount_work = parseInt(localStorage.getItem('adCount_work')) || 0;
+  function updateAdCounter() {
+    document.getElementById('adCounter').innerText = `Created Ads: ${adCount_work}`;
+  }
+  updateAdCounter();
 
   let mode = '';
   document.querySelectorAll('.ad-type-btn').forEach(btn => {
@@ -280,6 +288,9 @@
     const { text, error } = buildWorkAd(state);
     if (error) { showWarning(error); return; }
     document.getElementById('output').innerText = text;
+    adCount_work++;
+    localStorage.setItem('adCount_work', adCount_work);
+    updateAdCounter();
   };
 
   function resetForm() {
