@@ -217,6 +217,7 @@
     <div id="warningBox" class="warning-box"></div>
     <div id="output" class="output-box">Ready to post ad will appear here...</div>
     <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
+    <div id="adCounter" class="hint" style="text-align:center; margin-top:10px;">Created Ads: 0</div>
   </div>
 </div>
 
@@ -224,6 +225,13 @@
   import { buildBusinessAd, PRIVATE_BUSINESSES, FAMILY_BUSINESSES, SHARES_ELIGIBLE, isFamilyBusiness } from './en3-rules/business-rules.js';
 
   window.navigateTo = (page) => { window.location.href = page; };
+
+  // --- Created Ads sayaci (localStorage, sadece bu tarayicida kalici) ---
+  let adCount_business = parseInt(localStorage.getItem('adCount_business')) || 0;
+  function updateAdCounter() {
+    document.getElementById('adCounter').innerText = `Created Ads: ${adCount_business}`;
+  }
+  updateAdCounter();
 
   // --- business dropdown doldur ---
   const businessSelect = document.getElementById('businessSelect');
@@ -304,6 +312,9 @@
     const { text, error } = buildBusinessAd(state);
     if (error) { showWarning(error); return; }
     document.getElementById('output').innerText = text;
+    adCount_business++;
+    localStorage.setItem('adCount_business', adCount_business);
+    updateAdCounter();
   };
 
   function resetForm() {
