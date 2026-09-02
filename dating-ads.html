@@ -141,6 +141,7 @@
     <div id="warningBox" class="warning-box"></div>
     <div id="output" class="output-box">Ready to post ad will appear here...</div>
     <div id="successMsg" class="success-msg">✅ Ad copied and form cleared successfully.</div>
+    <div id="adCounter" class="hint" style="text-align:center; margin-top:10px;">Created Ads: 0</div>
   </div>
 </div>
 
@@ -148,6 +149,13 @@
   import { buildDatingAd, FIXED_PHRASES } from './en3-rules/dating-rules.js';
 
   window.navigateTo = (page) => { window.location.href = page; };
+
+  // --- Created Ads sayaci (localStorage, sadece bu tarayicida kalici) ---
+  let adCount_dating = parseInt(localStorage.getItem('adCount_dating')) || 0;
+  function updateAdCounter() {
+    document.getElementById('adCounter').innerText = `Created Ads: ${adCount_dating}`;
+  }
+  updateAdCounter();
 
   const phraseSelect = document.getElementById('phraseSelect');
   FIXED_PHRASES.forEach(p => {
@@ -189,6 +197,9 @@
     const { text, error } = buildDatingAd(state);
     if (error) { showWarning(error); return; }
     document.getElementById('output').innerText = text;
+    adCount_dating++;
+    localStorage.setItem('adCount_dating', adCount_dating);
+    updateAdCounter();
   };
 
   function resetForm() {
